@@ -12,8 +12,8 @@
 % --- Theorems, lemma, corollary, postulate, definition ---
 % \numberwithin{equation}{section}
 
-\newtcbtheorem[]{problem}{Task}%
-    {enhanced,
+\newtcolorbox{problem}[1][]{
+    enhanced,
     colback = black!5,
     colbacktitle = black!5,
     coltitle = black,
@@ -24,9 +24,11 @@
     breakable,
     before skip = 3ex,
     after skip = 3ex,
-    sharp corners, % optional: eckig statt rund
-    fontupper=\raggedright % <<< Das sorgt für linksbündigen normalen Text!
-}{problem}
+    sharp corners,
+    fontupper = \raggedright,
+    #1
+}
+
 
 \tcbuselibrary{skins, breakable}
 
