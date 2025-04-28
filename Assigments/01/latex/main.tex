@@ -1,0 +1,126 @@
+% !TEX root = ./main.tex
+% !TEX encoding = UTF-8 Unicode
+\input{preamble}
+\input{format}
+\input{commands}
+
+\begin{document}
+
+\begin{Large}
+    \textsf{\textbf{CPU Algorithm Design}} \\
+    \\
+    Exercise 1
+\end{Large}
+\vspace{1ex}
+\textsf{\textbf{Student:}} \text{Konstantin Benz} \\
+\vspace{2ex}
+
+\begin{problem}{}{Task 1}
+    \begin{enumerate}[(1)]
+        \item 
+            You use \cppinline{std::optional<T>} to represent an object of type \cppinline{T} that may or may not be present. 
+            It is a wrapper around the type \cppinline{T} that can be either empty or contain a value. 
+            This is useful when you want to indicate that a value might not be available without using pointers or special 
+            values (like \cppinline{nullptr} or \cppinline{-1}). \\
+            For instance, a \cppinline{find_user(id)} function can return \cppinline{std::optional<User>-std::nullopt}
+            if the user does not exist, otherwise the found \cppinline{User} object.
+        \item 
+            \cppinline{std::variant} is a type-safe union that can hold exactly one of several types. 
+            A \cppinline{std::tuple} is a fixed-size collection of the same types.
+            Therefore a \cppinline{std::variant} is more compact memory-wise than a \cppinline{std::tuple}, 
+            because it only needs to store the size of the largest type, while a \cppinline{std::tuple} 
+            needs to store the size of each type.
+        \item  
+            \cppinline{std::pair} and \cppinline{std::complex} give their two
+            components a fixed semantic meaning (first/second,
+            real/imaginary) and always contain exactly two elements.  
+            In contrast, \cppinline{std::tuple} and \cppinline{std::array} are
+            purely structural containers whose members are accessed by
+            position and have no predefined interpretation.
+
+        \item  
+            \cppinline{std::pair} and \cppinline{std::tuple} can store
+            heterogeneous types (each element may have a different
+            type).  
+            \cppinline{std::array<T, N>} and \cppinline{std::complex<T>}
+            are homogeneous: every stored value has the same type
+            \cppinline{T} (and, for \cppinline{std::complex}, there are always
+            exactly two such values).
+
+        \item  
+            \cppinline{std::complex<T>} is a domain-specific numeric
+            abstraction: beyond holding two values, it models the algebra
+            of complex numbers and overloads arithmetic operators
+            (`+`, `-`, `*`, `/`, `abs`, `arg`, …).
+            The other templates are generic containers and provide no
+            mathematical behaviour on their own.
+    \end{enumerate}
+\end{problem}
+
+\pagebreak
+
+\begin{problem}{}{Task 2}
+    \begin{enumerate}[(1)]
+        \item test
+    \end{enumerate}
+\end{problem}
+
+\pagebreak
+
+Here I show a very basic example of how to use the \textquote{\texttt{problem}} environment I defined using the \verb|\tcolorbox| package. You can define your own environments following the problem environment in the \texttt{format.tex} file.
+
+\begin{problem}{Your title}{problem-label}
+This is an example problem taken from \cite{Sakurai2020}:
+
+\begin{enumerate}[(a)]
+    \item Prove the following
+    \begin{enumerate}[label = (\roman*)]
+        \item $\langle p' | x | \alpha \rangle = \im \hbar \pdv{}{p'} \langle p' | \alpha \rangle$.
+
+        \item $\langle \beta | x | \alpha \rangle = \int \dd{p'} \phi_{\beta}^{*} (p') \im \hbar \pdv{}{p'} \phi_{\alpha} (p'),$
+
+        where $\phi_{\alpha}(p') = \langle p' | \alpha \rangle$ and $\phi_{\beta}(p') = \langle p' | \beta \rangle$ are momentum-space wave functions.
+    \end{enumerate}
+
+    \item What is the physical significance of 
+    \[
+    \exp\left(\dfrac{\im x \Xi}{\hbar}\right),
+    \]
+
+    where $x$ is the position operator and $\Xi$ is some number with the dimension of momentum? Justify your answer.
+\end{enumerate}
+\end{problem}
+
+Notice that the partial derivative and integral are smaller when used in a sentence compared with when you're working in a math environment like \verb|\begin{equation} \end{equation}|. If you want to display the full size of such commands in a sentence, you must use the command \verb|\displaystyle{}|, like it's shown here:
+
+\begin{problem}{Your title}{problem-label-2}
+This is an example problem taken from \cite{Sakurai2020}:
+
+\begin{enumerate}[(a)]
+    \item Prove the following
+    \begin{enumerate}[label = (\roman*)]
+        \item $\langle p' | x | \alpha \rangle = \im \hbar \displaystyle{\pdv{}{p'} }\langle p' | \alpha \rangle$.
+
+        \item $\langle \beta | x | \alpha \rangle = \displaystyle{\int \dd{p'} \phi_{\beta}^{*} (p') \im \hbar \pdv{}{p'} \phi_{\alpha} (p')}$, 
+
+        \vspace{1ex}
+
+        where $\phi_{\alpha}(p') = \langle p' | \alpha \rangle$ and $\phi_{\beta}(p') = \langle p' | \beta \rangle$ are momentum-space wave functions.
+    \end{enumerate}
+
+    \item $\cdots$
+\end{enumerate}
+\end{problem}
+
+I use the package \texttt{physics} which provides a great variety of commands for common operations and symbols. For instance, instead of typing \verb|\dfrac{\partial x}{\partial t}|, the \texttt{physics} package provides the command \verb|\pdv{x}{t}| which gives the same result. I also defined my own commands, so you can take a look in the \texttt{commands.tex} file if you like. I'd also suggest to create a folder and work each problem in a separate \texttt{.tex} file. I already included such folder in the \texttt{Overleaf} template, but you won't see it if you download the \texttt{Github} template. 
+
+% =================================================
+
+% \newpage
+
+%\vfill
+
+%\bibliographystyle{apalike}
+%%\bibliography{references}
+
+\end{document}

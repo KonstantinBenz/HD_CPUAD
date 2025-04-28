@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "name": "Win32",
+      "includePath": ["${workspaceFolder}/**"],
+      "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
+      "windowsSdkVersion": "10.0.26100.0",
+      "compilerPath": "cl.exe",
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-msvc-x64"
+    },
+    {
+      "name": "MinGW-gcc15",
+      "compilerPath": "C:/mingw64/bin/g++.exe", // <-- adjust if different
+      "intelliSenseMode": "gcc-x64",
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+      "includePath": [
+        "${workspaceFolder}/**"
+        // MinGW headers are found automatically via compilerPath,
+        // but you may add extra third-party paths here.
+      ],
+      "defines": ["_DEBUG", "UNICODE", "_UNICODE"]
+    }
+  ],
+  "version": 4
+}
