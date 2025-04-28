@@ -104,9 +104,9 @@ int main() {
 
     std::cout << std::fixed << std::setprecision(1);
     std::cout << "complex<double>[0].real = " << ap[0].first.real() << "\n"; // 6.0
-    std::cout << "int[0]                = " << ap[0].second        << "\n"; // 6
-    std::cout << "complex<float>[0].real = " << p2.first[0].real()  << "\n"; // 6.0
-    std::cout << "bool                  = " << std::boolalpha << p2.second << "\n"; // false
+    std::cout << "int[0]                  = " << ap[0].second        << "\n"; // 6
+    std::cout << "complex<float>[0].real  = " << p2.first[0].real()  << "\n"; // 6.0
+    std::cout << "bool                    = " << std::boolalpha << p2.second << "\n"; // false
 
     return 0;
 }
