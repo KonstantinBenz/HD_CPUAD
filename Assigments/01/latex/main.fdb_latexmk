@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 0 "main.bcf" "main.bbl" "main" 1745857187.51351 0
+["biber main"] 0 "main.bcf" "main.bbl" "main" 1745933122.13637 0
   "literatur.bib" 0 -1 0 ""
   "main.bcf" 0 -1 0 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1745857185.77004 "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/01/latex/main.tex" "main.pdf" "main" 1745857187.51412 0
-  "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/01/latex/main.tex" 1745857183 3188 de66df038fd584f76ccae7bf4b069232 ""
+["pdflatex"] 1745933120.36116 "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/01/latex/main.tex" "main.pdf" "main" 1745933122.13709 0
+  "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/01/latex/main.tex" 1745933119 3207 26ad96bb2e144d7c14d98c4959669bab ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1745830818 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1745831579 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecrm1200.tfm" 1745831251 3584 f80ddd985bd00e29e9a6047ebd9d4781 ""
@@ -212,11 +212,11 @@
   "c:/texlive/2025/texmf.cnf" 1745834868 713 e69b156964470283e0530f5060668171 ""
   "commands.tex" 1745838612 2206 6a33ba8183706f193d3cab596d7bea06 ""
   "format.tex" 1745856847 922 57c3403edc5d64844509203557c65cea ""
-  "main.aux" 1745857187 415 9c9e057a944a2c6ed8480bab7ce2951d "pdflatex"
+  "main.aux" 1745933121 415 9c9e057a944a2c6ed8480bab7ce2951d "pdflatex"
   "main.bbl" 0 -1 0 "biber main"
-  "main.out" 1745857186 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.run.xml" 1745857187 2343 757a5baa62a9243136774b0907ed4c11 "pdflatex"
-  "main.tex" 1745857183 3188 de66df038fd584f76ccae7bf4b069232 ""
+  "main.out" 1745933121 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.run.xml" 1745933121 2343 757a5baa62a9243136774b0907ed4c11 "pdflatex"
+  "main.tex" 1745933119 3207 26ad96bb2e144d7c14d98c4959669bab ""
   "preamble.tex" 1745838545 2101 1cea0b8f7d831975889fd4785c2ef259 ""
   (generated)
   "main.aux"
