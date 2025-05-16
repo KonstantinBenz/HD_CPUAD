@@ -1,0 +1,68 @@
+% !TEX root = ./main.tex
+% !TEX encoding = UTF-8 Unicode
+\input{preamble}
+\input{format}
+\input{commands}
+
+\begin{document}
+
+\begin{Large}
+    \textsf{\textbf{CPU Algorithm Design}} \\
+    \\
+    Exercise 2
+\end{Large}
+\vspace{1ex}
+\textsf{\textbf{Students:}} \text{Vishal Mangukiya, Konstantin Benz} \\
+\vspace{2ex}
+
+\begin{problem}{}{Task 1.1.x}
+    \begin{enumerate}[(1)]
+        \item 
+            You use \cppinline{std::optional<T>} to represent an object of type \cppinline{T} that may or may not be present. 
+            It is a wrapper around the type \cppinline{T} that can be either empty or contain a value. 
+            This is useful when you want to indicate that a value might not be available without using pointers or special 
+            values (like \cppinline{nullptr} or \cppinline{-1}). \\
+            For instance, a \cppinline{find_user(id)} function can return \cppinline{std::optional<User>-std::nullopt}
+            if the user does not exist, otherwise the found \cppinline{User} object.
+        \item 
+            \cppinline{std::variant} is a type-safe union that can hold exactly one of several types. 
+            A \cppinline{std::tuple} is a fixed-size collection of the same types.
+            Therefore a \cppinline{std::variant} is more compact memory-wise than a \cppinline{std::tuple}, 
+            because it only needs to store the size of the largest type, while a \cppinline{std::tuple} 
+            needs to store the size of each type.
+        \item  
+            \cppinline{std::pair} and \cppinline{std::complex} give their two
+            components a fixed semantic meaning (first/second,
+            real/imaginary) and always contain exactly two elements.  
+            In contrast, \cppinline{std::tuple} and \cppinline{std::array} are
+            purely structural containers whose members are accessed by
+            position and have no predefined interpretation.
+
+        \item  
+            \cppinline{std::pair} and \cppinline{std::tuple} can store
+            heterogeneous types (each element may have a different
+            type).  
+            \cppinline{std::array<T, N>} and \cppinline{std::complex<T>}
+            are homogeneous: every stored value has the same type
+            \cppinline{T} (and, for \cppinline{std::complex}, there are always
+            exactly two such values).
+
+        \item  
+            \cppinline{std::complex<T>} is a domain-specific numeric
+            abstraction: beyond holding two values, it models the algebra
+            of complex numbers and overloads arithmetic operators
+            (`+`, `-`, `*`, `/`, `abs`, `arg`, …).
+            The other templates are generic containers and provide no
+            mathematical behaviour on their own.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}{}{Task 1.2.x}
+    \begin{enumerate}[(1)]
+        \item Documented code including test inside file \cppinline{main-121.cpp}.
+        \item Documented code including test inside file \cppinline{main-122.cpp}.
+        \item Documented code including test inside file \cppinline{main-123.cpp}.
+    \end{enumerate}
+\end{problem}
+
+\end{document}
