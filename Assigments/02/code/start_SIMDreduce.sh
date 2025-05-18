@@ -7,4 +7,4 @@
 export OMP_PLACES=numa_domains
 export OMP_PROC_BIND=true
 
-./SIMD_reduce_bench
+./build/benchmarkSIMDreduce
