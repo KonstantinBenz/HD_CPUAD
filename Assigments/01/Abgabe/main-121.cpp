@@ -31,7 +31,7 @@ using Foo = std::optional<
 // -------------------------------------------------------------
 double get_first_double(Foo const &foo)
 {
-    if (!foo)
+    if (!foo.has_value()) // has_value() is clearer than operator!()
         return 42.0;
     if (!std::holds_alternative<Bar>(*foo))
         return 42.0;
