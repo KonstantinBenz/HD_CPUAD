@@ -1,1 +1,6 @@
+// move files
 scp ex02-code.tar.gz he343@asc-headnode.ziti.uni-heidelberg.de:/media/oldhome/kbenz
+// connect
+ssh he343@asc-headnode.ziti.uni-heidelberg.de
+// change path 
+cd /media/oldhome/kbenz/git
