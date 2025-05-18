@@ -7,4 +7,4 @@
 export OMP_PLACES=numa_domains
 export OMP_PROC_BIND=true
 
-./benchmarkSIMDtransform
+./SIMD_transform_bench
