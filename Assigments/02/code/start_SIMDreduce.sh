@@ -2,17 +2,21 @@
 #SBATCH -p rome
 #SBATCH -w asc-rome02
 #SBATCH --exclusive
+#SBATCH --export=ALL
 #SBATCH -o simd_reduce_output.txt
 
-# 1. Spack aktivieren (wichtig, sonst kennt die Shell 'spack' nicht!)
-source /opt/asc/spack/share/spack/setup-env.sh
+# Hardcoded libstdc++ (für GLIBCXX_3.4.32) aus GCC 14.2
+export LD_LIBRARY_PATH=/opt/asc/spack/opt/spack/linux-debian12-x86_64_v2/gcc-12.2.0/gcc-14.2.0-duw5n2gdhts3cjt6ikatgoh6g5qnibj3/lib64
 
-# 2. Umgebung wie interaktiv vollständig laden
-source load_env_CPUAD.sh
+# Hardcoded Intel libiomp5 Pfad (der, den du vorher per ldd hattest)
+export LD_LIBRARY_PATH=/shares/asc-opt/spack/opt/spack/linux-debian12-x86_64_v2/gcc-14.2.0/intel-oneapi-compilers-2024.2.1-cs4fy4zo5nwzv5kqhki2qxjjw57pi32t/compiler/2024.2/lib:$LD_LIBRARY_PATH
 
-# 3. Debug-Output zur Kontrolle
-echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
-ldd ./build/benchmarkSIMDreduce
+# OpenMP-Settings
+export OMP_PLACES=numa_domains
+export OMP_PROC_BIND=true
 
-# 4. Benchmark starten
-./build/benchmarkSIMDreduce
+# Debug-Check
+ldd ./build/benchmarkSIMDreduce > debug_env.txt
+
+# Benchmark ausführen
+./build/benchmarkSIMDreduce >> simd_reduce_output.txt 2>&1
