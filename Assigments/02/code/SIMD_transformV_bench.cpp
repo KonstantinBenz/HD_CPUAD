@@ -18,9 +18,9 @@ int main(){
 	// benchmarker(&test, &transform::benchTransformRange, "benchTransformRange", Nl, Nh, dur, timings,rec);
 	// benchmarker(&test, &transform::benchTransformRangeInnerLoop, "benchTransformRangeInnerLoop", Nl, Nh, dur, timings,rec);
 	// benchmarker(&test, &transform::benchTransformStl, "benchTransformStl", Nl, Nh, dur, timings,rec);
-	benchmarker(&test, &transform::benchTransformSimdStl, "benchTransformSimdStl", Nl, Nh, dur, timings,rec);
-	benchmarker(&test, &transform::benchXsimdTransform, "benchXsimdTransform", Nl, Nh, dur, timings,rec);
-	benchmarker(&test, &transform::benchXsimdTransformAligned, "benchXsimdTransformAligned", Nl, Nh, dur, timings,rec);
+	// benchmarker(&test, &transform::benchTransformSimdStl, "benchTransformSimdStl", Nl, Nh, dur, timings,rec);
+	// benchmarker(&test, &transform::benchXsimdTransform, "benchXsimdTransform", Nl, Nh, dur, timings,rec);
+	// benchmarker(&test, &transform::benchXsimdTransformAligned, "benchXsimdTransformAligned", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchOmpSimdTransformIterator, "benchOmpSimdTransformIterator", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchOmpSimdTransformIteratorInnerLoop, "benchOmpSimdTransformIteratorInnerLoop", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchOmpSimdTransformRange, "benchOmpSimdTransformRange", Nl, Nh, dur, timings,rec);
