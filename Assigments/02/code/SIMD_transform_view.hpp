@@ -139,21 +139,17 @@ public:
         for (auto _ : p_loop_state)
         {
             Index i = 0;
-            transform(begin(V), end(V), W.begin(), W.begin(),
-                      [&](Real v, Real w)
-                      {
-                          Real result = a * v + W[i % 256];
-                          ++i;
-                          return result;
-                      });
-            // W wird in-place modifiziert, aber wir brauchen i % 256 → Index-Handling mit i.
-            // Das überschreibt nur die ersten 256 Elemente von W, aber wir verwenden modulo-Zugriff trotzdem.
+            for (auto it = begin(V); i < N; ++it, ++i)
+            {
+                W[i % 256] = a * (*it) + W[i % 256];
+            }
             p_loop_action();
         }
 
-        p_log << "Stl \t" << views::take(W, Nout) << '\n';
+        p_log << "RangeInnerLoop \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
+    
     auto benchTransformStl(Index N = default_N)
     {
         // Do not change
