@@ -196,15 +196,22 @@ public:
 
         for (auto _ : p_loop_state)
         {
-            Index i = 0;
+            // Create temporary result vector to avoid modifying W during transform
+            vector<Real> results(N);
 
-            transform(stExec, begin(V), begin(V) + N, W.begin(),
-                      [&](Real v)
+            // First transform into temporary results array
+            transform(stExec, begin(V), begin(V) + N, results.begin(),
+                      [a, &W](Real v) -> Real
                       {
-                          Real result = a * v + W[i % 256];
-                          ++i;
-                          return result;
+                          Index idx = static_cast<Index>(v); // The value is the index
+                          return a * v + W[idx % 256];
                       });
+
+            // Then update W with the results
+            for (Index i = 0; i < N; ++i)
+            {
+                W[i % 256] = results[i];
+            }
 
             p_loop_action();
         }
