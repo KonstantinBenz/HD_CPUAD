@@ -160,17 +160,25 @@ public:
                                                    { return Real(i); });
         // W: Container mit 256 Elementen, initial auf 1.0f gesetzt
         vector<Real> W(256, 1.0f);
-        for (auto _ : p_loop_state) // Fixed: Using _ as the loop variable like in other functions
+        for (auto _ : p_loop_state)
         {
-            Index i = 0;
-            // Transformation von V → W in-place mit modulo-Indexierung
-            transform(begin(V), begin(V) + N, W.begin(),
-                      [&](Real v)
+            // Create temporary result vector to avoid modifying W during transform
+            vector<Real> results(N);
+
+            // First transform into temporary results array
+            transform(begin(V), begin(V) + N, results.begin(),
+                      [a, &W](Real v) -> Real
                       {
-                          Real result = a * v + W[i % 256];
-                          ++i;
-                          return result;
+                          Index idx = static_cast<Index>(v); // The value is the index
+                          return a * v + W[idx % 256];
                       });
+
+            // Then update W with the results
+            for (Index i = 0; i < N; ++i)
+            {
+                W[i % 256] = results[i];
+            }
+
             p_loop_action();
         }
         p_log << "Stl \t" << views::take(W, Nout) << '\n';
