@@ -160,7 +160,7 @@ public:
                                                    { return Real(i); });
         // W: Container mit 256 Elementen, initial auf 1.0f gesetzt
         vector<Real> W(256, 1.0f);
-        for (auto *p : loop_state) // Fixed the syntax here: "auto *" -> "auto* p"
+        for (auto _ : p_loop_state) // Fixed: Using _ as the loop variable like in other functions
         {
             Index i = 0;
             // Transformation von V → W in-place mit modulo-Indexierung
@@ -171,36 +171,37 @@ public:
                           ++i;
                           return result;
                       });
-            p_loop_action(); // This might need to be p->loop_action() depending on your code
+            p_loop_action();
         }
-        p_log << "Stl \t" << views::take(W, Nout) << '\n'; // This might need to be another pointer reference
+        p_log << "Stl \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
 
-    auto benchTransformStl(Index N = default_N)
+    auto benchTransformSimdStl(Index N = default_N)
     {
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // V: iota von 0 bis N (als Real)
         auto V = views::iota(0) | views::transform([](int i)
                                                    { return Real(i); });
-        // W: Container mit 256 Elementen, initial auf 1.0f gesetzt
         vector<Real> W(256, 1.0f);
-        for (auto _ : p_loop_state) // Fixed: Using _ as the loop variable like in other functions
+
+        for (auto _ : p_loop_state)
         {
             Index i = 0;
-            // Transformation von V  W in-place mit modulo-Indexierung
-            transform(begin(V), begin(V) + N, W.begin(),
+
+            transform(stExec, begin(V), begin(V) + N, W.begin(),
                       [&](Real v)
                       {
                           Real result = a * v + W[i % 256];
                           ++i;
                           return result;
                       });
+
             p_loop_action();
         }
-        p_log << "Stl \t" << views::take(W, Nout) << '\n';
+
+        p_log << "SimdStl \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
 
