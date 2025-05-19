@@ -25,7 +25,7 @@ int main(){
 	benchmarker(&test, &transform::benchOmpSimdTransformIteratorInnerLoop, "benchOmpSimdTransformIteratorInnerLoop", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchOmpSimdTransformRange, "benchOmpSimdTransformRange", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchOmpSimdTransformRangeInnerLoop, "benchOmpSimdTransformRangeInnerLoop", Nl, Nh, dur, timings,rec);
-	// std::cout << test.get_log();
+	std::cout << test.get_log();
 
 	return 0;
 }

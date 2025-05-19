@@ -96,6 +96,119 @@ Overall, the reduce benchmark benefits more clearly from explicit SIMD optimizat
 
 \section*{2.2 Adapting reduce and transform}
 
+This section analyzes the performance of the view-based implementations in \\
+\texttt{SIMD\_transformV\_bench.cpp} and \texttt{SIMD\_reduceV\_bench.cpp}.
+
+The results are based on the benchmark data shown in Figure~\ref{fig:simd_reduceV_output} and Figure~\ref{fig:simd_transformV_output}, and summarized in Tables~\ref{tab:reduceV} and \ref{tab:transformV}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/simd_reduceV_output.txt_ex02.png}
+    \caption{Reduce view-based benchmark results (average time)}
+    \label{fig:simd_reduceV_output}
+\end{figure}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Benchmark}         & \textbf{Time [ns]} \\
+        \hline
+        benchReduceIterator        & 2.017e+08          \\
+        benchReduceRange           & 2.017e+08          \\
+        benchReduceStl             & 2.018e+08          \\
+        benchReduceSimdStl         & 2.017e+08          \\
+        benchReduceSimdOmpIterator & 1.816e+06          \\
+        benchReduceSimdOmpRange    & 1.699e+06          \\
+        \hline
+    \end{tabular}
+    \caption{Average execution time of reduce (view-based)}
+    \label{tab:reduceV}
+\end{table}
+
+The reduce benchmarks show two clear performance levels.
+The iterator-based, range-based, STL and SIMD STL implementations all perform nearly identically, with average execution times around 201 milliseconds.
+This indicates that these variants fully evaluate the logical view and process all elements in sequence.
+In contrast, the OpenMP variants \texttt{benchReduceSimdOmpIterator} and \texttt{benchReduceSimdOmpRange} significantly reduce runtime to around 1.7--1.8 milliseconds.
+This suggests that parallel execution over the view is at least partially effective, though the high standard deviation for \texttt{OmpIterator} indicates overhead or thread imbalance.
+Overall, threading improves performance in this context, but the iterator and STL-based approaches remain far slower due to their sequential traversal of the view.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/simd_transformV_output.txt_ex02.png}
+    \caption{Transform view-based benchmark results (average time)}
+    \label{fig:simd_transformV_output}
+\end{figure}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Benchmark}                     & \textbf{Time [ns]} \\
+        \hline
+        benchTransformIterator                 & 4.060e+08          \\
+        benchTransformIteratorInnerLoop        & 4.058e+08          \\
+        benchTransformRange                    & \textbf{4.042e+08} \\
+        benchTransformRangeInnerLoop           & 4.055e+08          \\
+        benchTransformStl                      & 2.486e+09          \\
+        benchTransformSimdStl                  & 2.311e+09          \\
+        benchOmpSimdTransformIterator          & 2.299e+09          \\
+        benchOmpSimdTransformIteratorInnerLoop & 4.057e+08          \\
+        benchOmpSimdTransformRange             & 4.060e+08          \\
+        \hline
+    \end{tabular}
+    \caption{Average execution time of transform (view-based)}
+    \label{tab:transformV}
+\end{table}
+
+In the transform benchmarks, we observe a different behavior.
+The iterator and range-based implementations, including inner loop variants, perform consistently well with average times around 404--406 milliseconds.
+However, the STL-based and OpenMP STL-based approaches exhibit much worse performance, with runtimes around 2.3-2.5 seconds.
+This indicates that using \texttt{std::transform} with \texttt{std::execution::unseq} or \texttt{par\_unseq} over a range view is highly inefficient.
+The likely cause is that \texttt{views::iota} produces a non-random-access iterator, which limits the effectiveness of STL algorithms optimized for contiguous memory.
+Interestingly, the OpenMP transform variants with manual loops perform comparably to their sequential counterparts, suggesting that manual loop parallelism over views is more efficient than relying on STL abstractions in this context.
+The transform results highlight that while views can be powerful and expressive, combining them with STL algorithms—especially in parallel—must be done with care, as performance can degrade significantly.
+
+\pagebreak
+
+\section*{3.3 Adapting xsimd reduce and transform}
+
+This section analyzes the specialized SIMD implementations using xsimd for both reduce and transform.
+Unlike the view-based versions in problem 2, these implementations operate only on a small, fixed-size \texttt{std::array} with a size of 3\,\texttt{*}\,simd\_width.
+This setup allows repeated access to aligned or unaligned memory without causing invalid accesses, while still enabling batch-based vector processing.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/simd_reduceVX_output.txt_ex02.png}
+    \caption{xsimd reduce benchmark variants (average time)}
+    \label{fig:simd_reduceVX_output}
+\end{figure}
+
+Figure~\ref{fig:simd_reduceVX_output} compares the three reduce variants implemented with xsimd: horizontal, vertical, and aligned.
+All three implementations show extremely low runtimes around 47 nanoseconds, which is several orders of magnitude faster than any view-based approach.
+The horizontal version performs the reduction across one batch, using operations like \texttt{xsimd::reduce} or manual lane summation.
+The vertical version sums multiple SIMD batches in a loop, effectively unrolling the reduction and increasing instruction-level parallelism.
+The aligned version uses the same logic as the vertical one but ensures memory alignment to 64-byte cache-line boundaries.
+All three perform similarly, but the aligned version is consistently the fastest, confirming the expected benefits of aligned memory access.
+Vertical reduction also slightly outperforms horizontal, due to reduced instruction overhead and better pipeline utilization.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/simd_transformVX_output.txt_ex02.png}
+    \caption{xsimd transform benchmark variants (average time)}
+    \label{fig:simd_transformVX_output}
+\end{figure}
+
+Figure~\ref{fig:simd_transformVX_output} shows the results for the xsimd transform benchmarks, again comparing aligned and unaligned versions.
+Both versions operate on small \texttt{std::array}s where input \texttt{V} is initialized with increasing values \{1, 2, 3, ...\} and \texttt{W} with \{2, 3, 4, ...\}.
+The operation performed is \texttt{W = a * V + W}, which always computes over the same memory region and values.
+As expected, the timings are extremely low: 18.82 nanoseconds for the unaligned and 18.63 nanoseconds for the aligned version.
+The small gap again highlights the benefit of alignment, though in this idealized setting the difference is marginal.
+Unlike the implementations in problem 2, which traversed large views, these results isolate pure SIMD register performance.
+They represent the lower bound of runtime one can expect for such a transformation under perfect conditions.
+In summary, the xsimd-based implementations showcase the peak performance achievable using batch-based SIMD over memory-resident arrays.
+The differences between horizontal and vertical reduction strategies illustrate how internal algorithmic structure and alignment can influence performance, even at nanosecond scale.
+
 
 
 \end{document}

@@ -23,7 +23,7 @@ int main(){
 	benchmarker(&test, &reduce::benchReduceSimdXVertical, "benchReduceSimdXVertical", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &reduce::benchReduceSimdXAlign, "benchReduceSimdXAlign", Nl, Nh, dur, timings,rec);
 
-    // std::cout << test.get_log();
+    std::cout << test.get_log();
 
 	return 0;
 }

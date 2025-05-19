@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 0 "main.bcf" "main.bbl" "main" 1747674907.27216 0
+["biber main"] 0 "main.bcf" "main.bbl" "main" 1747685419.17068 0
   "literatur.bib" 0 -1 0 ""
   "main.bcf" 0 -1 0 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1747674905.4739 "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" "main.pdf" "main" 1747674907.27277 0
-  "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" 1747674903 4756 1f7670d4341daa75ac635351a2affc23 ""
+["pdflatex"] 1747685417.18709 "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" "main.pdf" "main" 1747685419.17126 0
+  "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" 1747685416 12317 769683b20bf8343ec7db0631e9302aa8 ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1745830818 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1745831579 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecbx1095.tfm" 1745831251 3584 21b378cca2e40816b0e6d74a4dc98f04 ""
@@ -241,13 +241,17 @@
   "c:/texlive/2025/texmf.cnf" 1745834868 713 e69b156964470283e0530f5060668171 ""
   "commands.tex" 1745838612 2206 6a33ba8183706f193d3cab596d7bea06 ""
   "format.tex" 1745856847 922 57c3403edc5d64844509203557c65cea ""
-  "img/simd_reduce_output.txt_ex02.png" 1747673711 48815 1169f255601f908a9f214ee6ed75d3a2 ""
+  "img/simd_reduceVX_output.txt_ex02.png" 1747684281 33007 12a2535c2273e46fbc7cdca9e7d7fb7f ""
+  "img/simd_reduceV_output.txt_ex02.png" 1747684242 41873 ace815077d953a4eb1f2480c634fad83 ""
+  "img/simd_reduce_output.txt_ex02.png" 1747683449 48815 1169f255601f908a9f214ee6ed75d3a2 ""
+  "img/simd_transformVX_output.txt_ex02.png" 1747684274 29864 61102b2481c4713f92e2355d7336c9cf ""
+  "img/simd_transformV_output.txt_ex02.png" 1747684265 54360 5fa7e008d29bdc2fc2b9ac31f91bea2a ""
   "img/simd_transform_output.txt_ex02.png" 1747673794 59053 dd31c2239757915fcca08878aa3a16fa ""
-  "main.aux" 1747674906 1584 b9a2b2e1bbe544057ccb864959584e92 "pdflatex"
+  "main.aux" 1747685418 3253 454584b6ba3aac94763f804ae4cc0c17 "pdflatex"
   "main.bbl" 1747569805 486 ee04f40f768daeed26442158e95aba61 "biber main"
-  "main.out" 1747674906 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.run.xml" 1747674906 2344 5b47321a4a9d96ced851773cb778a7be "pdflatex"
-  "main.tex" 1747674903 4756 1f7670d4341daa75ac635351a2affc23 ""
+  "main.out" 1747685418 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.run.xml" 1747685418 2344 5b47321a4a9d96ced851773cb778a7be "pdflatex"
+  "main.tex" 1747685416 12317 769683b20bf8343ec7db0631e9302aa8 ""
   "preamble.tex" 1747674508 2102 7321a8806f12174c800f406376e46a2b ""
   (generated)
   "main.aux"

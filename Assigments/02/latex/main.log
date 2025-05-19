@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.28)  19 MAY 2025 19:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.28)  19 MAY 2025 22:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1166,8 +1166,47 @@ Package pdftex.def Info: img/simd_transform_output.txt_ex02.png  used on input l
 
 
 [3 <./img/simd_transform_output.txt_ex02.png>]
+<img/simd_reduceV_output.txt_ex02.png, id=46, 722.7pt x 433.62pt>
+File: img/simd_reduceV_output.txt_ex02.png Graphic file (type png)
+<use img/simd_reduceV_output.txt_ex02.png>
+Package pdftex.def Info: img/simd_reduceV_output.txt_ex02.png  used on input line 106.
+(pdftex.def)             Requested size: 409.71692pt x 245.82944pt.
+<img/simd_transformV_output.txt_ex02.png, id=47, 722.7pt x 433.62pt>
+File: img/simd_transformV_output.txt_ex02.png Graphic file (type png)
+<use img/simd_transformV_output.txt_ex02.png>
+Package pdftex.def Info: img/simd_transformV_output.txt_ex02.png  used on input line 138.
+(pdftex.def)             Requested size: 409.71692pt x 245.82944pt.
 
-[4] (./main.aux)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[4 <./img/simd_reduceV_output.txt_ex02.png>]
+
+[5 <./img/simd_transformV_output.txt_ex02.png>]
+<img/simd_reduceVX_output.txt_ex02.png, id=62, 722.7pt x 433.62pt>
+File: img/simd_reduceVX_output.txt_ex02.png Graphic file (type png)
+<use img/simd_reduceVX_output.txt_ex02.png>
+Package pdftex.def Info: img/simd_reduceVX_output.txt_ex02.png  used on input line 182.
+(pdftex.def)             Requested size: 409.71692pt x 245.82944pt.
+<img/simd_transformVX_output.txt_ex02.png, id=64, 722.7pt x 433.62pt>
+File: img/simd_transformVX_output.txt_ex02.png Graphic file (type png)
+<use img/simd_transformVX_output.txt_ex02.png>
+Package pdftex.def Info: img/simd_transformVX_output.txt_ex02.png  used on input line 197.
+(pdftex.def)             Requested size: 409.71692pt x 245.82944pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[6 <./img/simd_reduceVX_output.txt_ex02.png>]
+
+[7 <./img/simd_transformVX_output.txt_ex02.png>] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-03-26>
@@ -1179,18 +1218,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 40246 strings out of 469626
- 780152 string characters out of 5475183
- 1661118 words of memory out of 5000000
- 66427 multiletter control sequences out of 15000+600000
- 642153 words of font info for 104 fonts, out of 8000000 for 9000
+ 40323 strings out of 469626
+ 782020 string characters out of 5475183
+ 1663588 words of memory out of 5000000
+ 66461 multiletter control sequences out of 15000+600000
+ 643156 words of font info for 121 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  121i,8n,124p,1255b,1779s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfsx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfsx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on main.pdf (4 pages, 259249 bytes).
+Output written on main.pdf (7 pages, 418525 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
- 60 compressed objects within 1 object stream
- 9 named destinations out of 1000 (max. 500000)
- 27159 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 124 PDF objects out of 1000 (max. 8388607)
+ 84 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 500000)
+ 27179 words of extra memory for PDF output out of 29859 (max. 10000000)
 

@@ -7,7 +7,7 @@ avg_times = []
 stdev_times = []
 
 #filename= 'simd_reduce_output.txt'
-filename= 'simd_transform_output.txt'
+filename= 'simd_reduceVX_output.txt'
 
 # Read CSV file, change the name of the file to read a different file
 with open(filename, 'r') as file:

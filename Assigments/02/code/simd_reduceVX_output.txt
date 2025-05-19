@@ -1,0 +1,4 @@
+name,size,avg throughput,avg time,stdev time,cv
+benchReduceSimdXHorizontal,1073741824,9.1245e+07,47.0707,5.73004,0.121733
+benchReduceSimdXVertical,1073741824,9.16186e+07,46.8788,5.25755,0.112152
+benchReduceSimdXAlign,1073741824,9.18362e+07,46.7677,5.09075,0.108852
