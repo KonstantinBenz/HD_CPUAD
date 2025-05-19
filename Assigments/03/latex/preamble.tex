@@ -1,0 +1,85 @@
+\documentclass[a4paper,12pt]{article}
+
+% ==================================================
+% Sprache und Zeichencodierung
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% ==================================================
+% Seitenlayout
+\usepackage[
+  left=2.5cm,
+  right=2.5cm,
+  top=2.5cm,
+  bottom=2.5cm
+]{geometry}
+
+% ==================================================
+% Mathematik
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{physics}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+\usepackage{esint}
+
+% ==================================================
+% Programmierung
+\usepackage{listings}
+
+% ==================================================
+% Textgestaltung
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{framed}
+\usepackage{csquotes} % wichtig für deutsche Anführungszeichen
+\usepackage{microtype} % bessere Silbentrennung und Schriftbild
+
+% ==================================================
+% Tabellen, Grafiken
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{
+    format=hang,
+    margin=10pt,
+    font=small,
+    labelfont=bf
+}
+
+% ==================================================
+% Literaturverzeichnis
+\usepackage[
+    backend=biber,
+    style=authoryear,
+    natbib=true
+]{biblatex}
+\addbibresource{literatur.bib}
+
+% ==================================================
+% Hyperlinks
+\usepackage{hyperref}
+\usepackage{xcolor}
+\definecolor{links}{rgb}{0.36,0.54,0.66}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=links,
+    citecolor=links,
+    filecolor=links,
+    pdfauthor={Dein Name},
+    pdftitle={Titel der Arbeit},
+    pdfsubject={Hausarbeit},
+    pdfkeywords={Schlüsselwort1, Schlüsselwort2},
+    pdfproducer={LaTeX},
+    pdfcreator={pdfLaTeX}
+}
+
+% ==================================================
+% Eigene Befehle (optional)
+\newcommand{\R}{\mathbb{R}} % Beispiel für eigene Makros
