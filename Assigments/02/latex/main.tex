@@ -209,6 +209,64 @@ They represent the lower bound of runtime one can expect for such a transformati
 In summary, the xsimd-based implementations showcase the peak performance achievable using batch-based SIMD over memory-resident arrays.
 The differences between horizontal and vertical reduction strategies illustrate how internal algorithmic structure and alignment can influence performance, even at nanosecond scale.
 
+\pagebreak
+
+\section*{3.4 Precision in SIMD Reduction}
+
+Floating-point addition is not associative, i.e.,
+
+\[
+    (a + b) + c \neq a + (b + c)
+\]
+
+due to limited precision and rounding errors.
+This property affects parallel or SIMD-based reductions, where the order of operations differs from sequential execution.
+In this benchmark, we reduced a sequence of \texttt{float} values all set to 1.0, with \( N = 2^{28} = 268{,}435{,}456 \).
+The mathematically correct result should be:
+
+\[
+    \text{sum} = \sum_{i=1}^{N} 1.0 = 268{,}435{,}456.0
+\]
+
+This value was produced by the iterator-based version:
+
+\begin{verbatim}
+benchReduceIterator        268435456.00000000
+\end{verbatim}
+
+However, SIMD and OpenMP versions will produce slightly different outputs which we cant showcase because of an linker error.
+
+This discrepancy could be caused by floating-point rounding error in intermediate summations, which differ depending on how values are grouped.
+For example, in SIMD, summation might proceed as:
+
+\[
+    ((1 + 1) + (1 + 1)) + \ldots
+    \quad \text{vs.} \quad
+    1 + 1 + 1 + 1 + \ldots
+\]
+
+Each grouping introduces small errors due to IEEE-754 rounding after each addition.
+These accumulate across millions of elements, causing observable deviation.
+To obtain more stable and reproducible results, specialized summation techniques can be used.
+One such method is \textbf{Kahan Summation}, which introduces a compensation variable:
+
+\[
+    \text{sum} = 0,\quad c = 0
+\]
+\[
+    \text{for each } x_i: \quad y = x_i - c;\quad t = \text{sum} + y;\quad c = (t - \text{sum}) - y;\quad \text{sum} = t
+\]
+
+Another approach is \textbf{pairwise summation}, which reduces the error by recursively summing small groups:
+
+\[
+    \text{sum} = \text{reduce\_pairs}(a_1, \ldots, a_n)
+\]
+
+Both techniques improve precision but incur performance costs, and are rarely used in fast SIMD kernels.
+For this assignment, the sequential result from \texttt{benchReduceIterator} is considered the reference.
+Deviations in other results are expected due to the trade-off between speed and accuracy.
+If bitwise-reproducible results are required in scientific computing, additional care must be taken to control floating-point summation.
 
 
 \end{document}
