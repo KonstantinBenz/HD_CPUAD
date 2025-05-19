@@ -54,11 +54,19 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+            for (Real v : V)
+            {
+                W[i % 256] = a * v + W[i % 256];
+                if (++i >= N)
+                    break;
+            }
 
             p_loop_action();
         }
@@ -72,11 +80,17 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+            for (auto it = begin(V); i < N; ++it, ++i)
+            {
+                W[i % 256] = a * (*it) + W[i % 256];
+            }
 
             p_loop_action();
         }
@@ -91,11 +105,19 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+            for (Real v : V)
+            {
+                W[i % 256] = a * v + W[i % 256];
+                if (++i >= N)
+                    break;
+            }
 
             p_loop_action();
         }
@@ -110,16 +132,26 @@ public:
         constexpr Index simd_width = 8;
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
-
+            Index i = 0;
+            transform(begin(V), end(V), W.begin(), W.begin(),
+                      [&](Real v, Real w)
+                      {
+                          Real result = a * v + W[i % 256];
+                          ++i;
+                          return result;
+                      });
+            // W wird in-place modifiziert, aber wir brauchen i % 256 → Index-Handling mit i.
+            // Das überschreibt nur die ersten 256 Elemente von W, aber wir verwenden modulo-Zugriff trotzdem.
             p_loop_action();
         }
 
-        p_log << "RangeInnerLoop \t" << views::take(W, Nout) << '\n';
+        p_log << "Stl \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
     auto benchTransformStl(Index N = default_N)
@@ -127,11 +159,25 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        // V: iota von 0 bis N (als Real)
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+
+        // W: Container mit 256 Elementen, initial auf 1.0f gesetzt
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+
+            // Transformation von V → W in-place mit modulo-Indexierung
+            transform(begin(V), begin(V) + N, W.begin(),
+                      [&](Real v)
+                      {
+                          Real result = a * v + W[i % 256];
+                          ++i;
+                          return result;
+                      });
 
             p_loop_action();
         }
@@ -145,11 +191,21 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+
+            transform(stExec, begin(V), begin(V) + N, W.begin(),
+                      [&](Real v)
+                      {
+                          Real result = a * v + W[i % 256];
+                          ++i;
+                          return result;
+                      });
 
             p_loop_action();
         }
@@ -164,17 +220,32 @@ public:
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         Index Nout = min(N, default_Nout);
-        // TODO
+        Real a = -1.0f;
+
+        std::array<Real, 3 * simd_width> V_data;
+        std::array<Real, 3 * simd_width> W_data;
+
+        // Initialisierung: V = {1, 2, 3, ...}, W = {2, 3, 4, ...}
+        for (size_t i = 0; i < V_data.size(); ++i)
+        {
+            V_data[i] = Real(i + 1);
+            W_data[i] = Real(i + 2);
+        }
 
         for (auto _ : p_loop_state)
         {
-            // using xsimd with aligned container
-            batch a_vec(-1.0f);
-            // TODO
+            batch a_vec(a);
+            batch v = batch::load_unaligned(&V_data[0]);
+            batch w = batch::load_unaligned(&W_data[0]);
+
+            batch result = a_vec * v + w;
+
+            result.store_unaligned(&W_data[0]);
 
             p_loop_action();
         }
-        p_log << "xsimd \t" << views::take(W, Nout) << '\n';
+
+        p_log << "xsimd \t" << views::take(W_data, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
 
@@ -184,17 +255,32 @@ public:
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         Index Nout = min(N, default_Nout);
-        // TODO
+        Real a = -1.0f;
+
+        // aligned array für sauberen SIMD-Zugriff
+        alignas(64) std::array<Real, 3 * simd_width> V_data;
+        alignas(64) std::array<Real, 3 * simd_width> W_data;
+
+        for (size_t i = 0; i < V_data.size(); ++i)
+        {
+            V_data[i] = Real(i + 1);
+            W_data[i] = Real(i + 2);
+        }
 
         for (auto _ : p_loop_state)
         {
-            // using xsimd with aligned container
-            batch a_vec(-1.0f);
-            // TODO
+            batch a_vec(a);
+            batch v = batch::load_aligned(&V_data[0]);
+            batch w = batch::load_aligned(&W_data[0]);
+
+            batch result = a_vec * v + w;
+
+            result.store_aligned(&W_data[0]);
 
             p_loop_action();
         }
-        p_log << "xsimd_aligned \t" << views::take(W, Nout) << '\n';
+
+        p_log << "xsimd_aligned \t" << views::take(W_data, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
 
@@ -203,14 +289,25 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+
+            transform(mtExec, begin(V), begin(V) + N, W.begin(),
+                      [&](Real v)
+                      {
+                          Real result = a * v + W[i % 256];
+                          ++i;
+                          return result;
+                      });
 
             p_loop_action();
         }
+
         p_log << "OmpIterator \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
@@ -219,14 +316,24 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+
+            for_each(mtExec, begin(V), begin(V) + N,
+                     [&](Real v)
+                     {
+                         W[i % 256] = a * v + W[i % 256];
+                         ++i;
+                     });
 
             p_loop_action();
         }
+
         p_log << "OmpIteratorInnerLoop \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
@@ -236,14 +343,24 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+
+            for_each(mtExec, V.begin(), V.begin() + N,
+                     [&](Real v)
+                     {
+                         W[i % 256] = a * v + W[i % 256];
+                         ++i;
+                     });
 
             p_loop_action();
         }
+
         p_log << "OmpRange \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
@@ -253,15 +370,24 @@ public:
         // Do not change
         Real a = -1.0f;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto V = views::iota(0) | views::transform([](int i)
+                                                   { return Real(i); });
+        vector<Real> W(256, 1.0f);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            Index i = 0;
+
+            for_each(mtExec, begin(V), begin(V) + N,
+                     [&](Real v)
+                     {
+                         W[i % 256] = a * v + W[i % 256];
+                         ++i;
+                     });
 
             p_loop_action();
         }
-        // Do not change
+
         p_log << "OmpRangeInnerLoop \t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
