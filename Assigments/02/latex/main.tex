@@ -171,7 +171,7 @@ The transform results highlight that while views can be powerful and expressive,
 
 \pagebreak
 
-\section*{3.3 Adapting xsimd reduce and transform}
+\section*{2.3 Adapting xsimd reduce and transform}
 
 This section analyzes the specialized SIMD implementations using xsimd for both reduce and transform.
 Unlike the view-based versions in problem 2, these implementations operate only on a small, fixed-size \texttt{std::array} with a size of 3\,\texttt{*}\,simd\_width.
@@ -211,7 +211,7 @@ The differences between horizontal and vertical reduction strategies illustrate 
 
 \pagebreak
 
-\section*{3.4 Precision in SIMD Reduction}
+\section*{2.4 Precision in SIMD Reduction}
 
 Floating-point addition is not associative, i.e.,
 
@@ -228,13 +228,7 @@ The mathematically correct result should be:
     \text{sum} = \sum_{i=1}^{N} 1.0 = 268{,}435{,}456.0
 \]
 
-This value was produced by the iterator-based version:
-
-\begin{verbatim}
-benchReduceIterator        268435456.00000000
-\end{verbatim}
-
-However, SIMD and OpenMP versions will produce slightly different outputs which we cant showcase because of an linker error.
+However, SIMD and OpenMP versions will produce slightly different outputs which we unfortunately cant showcase because of an random linker error after compiling.
 
 This discrepancy could be caused by floating-point rounding error in intermediate summations, which differ depending on how values are grouped.
 For example, in SIMD, summation might proceed as:

@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 0 "main.bcf" "main.bbl" "main" 1747687882.24194 0
+["biber main"] 0 "main.bcf" "main.bbl" "main" 1747688277.93149 0
   "literatur.bib" 0 -1 0 ""
   "main.bcf" 0 -1 0 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1747687880.19739 "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" "main.pdf" "main" 1747687882.24255 0
-  "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" 1747687879 14591 524561c314a15c4411f478b15999b2e3 ""
+["pdflatex"] 1747688275.9204 "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" "main.pdf" "main" 1747688277.93209 0
+  "c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/main.tex" 1747688275 14487 50ae4d3b735981a1e67ca1134399c80b ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1745830818 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1745831579 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecbx1095.tfm" 1745831251 3584 21b378cca2e40816b0e6d74a4dc98f04 ""
@@ -255,11 +255,11 @@
   "img/simd_transformVX_output.txt_ex02.png" 1747684274 29864 61102b2481c4713f92e2355d7336c9cf ""
   "img/simd_transformV_output.txt_ex02.png" 1747684265 54360 5fa7e008d29bdc2fc2b9ac31f91bea2a ""
   "img/simd_transform_output.txt_ex02.png" 1747673794 59053 dd31c2239757915fcca08878aa3a16fa ""
-  "main.aux" 1747687881 3253 53e7837630d241d7c1ee0040e751e10a "pdflatex"
+  "main.aux" 1747688277 3253 53e7837630d241d7c1ee0040e751e10a "pdflatex"
   "main.bbl" 1747569805 486 ee04f40f768daeed26442158e95aba61 "biber main"
-  "main.out" 1747687881 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.run.xml" 1747687881 2344 5b47321a4a9d96ced851773cb778a7be "pdflatex"
-  "main.tex" 1747687879 14591 524561c314a15c4411f478b15999b2e3 ""
+  "main.out" 1747688276 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.run.xml" 1747688277 2344 5b47321a4a9d96ced851773cb778a7be "pdflatex"
+  "main.tex" 1747688275 14487 50ae4d3b735981a1e67ca1134399c80b ""
   "preamble.tex" 1747674508 2102 7321a8806f12174c800f406376e46a2b ""
   (generated)
   "main.aux"
