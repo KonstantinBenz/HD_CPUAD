@@ -41,11 +41,7 @@
   >
 ]>
 <requests version="1.0">
-<<<<<<< HEAD
-  <internal package="biblatex" priority="9" active="1">
-=======
   <internal package="biblatex" priority="9" active="0">
->>>>>>> 9bd5786dbda211030889cf0b0e62a79cc88949c8
     <generic>latex</generic>
     <provides type="dynamic">
       <file>main.bcf</file>
@@ -62,14 +58,10 @@
       <file>authoryear.bbx</file>
       <file>authoryear.cbx</file>
       <file>biblatex.cfg</file>
-      <file>german.lbx</file>
+      <file>english.lbx</file>
     </requires>
   </internal>
-<<<<<<< HEAD
-  <external package="biblatex" priority="5" active="1">
-=======
   <external package="biblatex" priority="5" active="0">
->>>>>>> 9bd5786dbda211030889cf0b0e62a79cc88949c8
     <generic>biber</generic>
     <cmdline>
       <binary>biber</binary>

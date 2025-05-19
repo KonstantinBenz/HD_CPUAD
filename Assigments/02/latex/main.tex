@@ -9,64 +9,93 @@
 \begin{Large}
     \textsf{\textbf{CPU Algorithm Design}} \\
     \\
-<<<<<<< HEAD
-    Exercise 1
-=======
     Exercise 2
->>>>>>> 9bd5786dbda211030889cf0b0e62a79cc88949c8
 \end{Large}
 \vspace{1ex}
 \textsf{\textbf{Students:}} \text{Vishal Mangukiya, Konstantin Benz} \\
 \vspace{2ex}
 
-\begin{problem}{}{Task 1.1.x}
-    \begin{enumerate}[(1)]
-        \item 
-            You use \cppinline{std::optional<T>} to represent an object of type \cppinline{T} that may or may not be present. 
-            It is a wrapper around the type \cppinline{T} that can be either empty or contain a value. 
-            This is useful when you want to indicate that a value might not be available without using pointers or special 
-            values (like \cppinline{nullptr} or \cppinline{-1}). \\
-            For instance, a \cppinline{find_user(id)} function can return \cppinline{std::optional<User>-std::nullopt}
-            if the user does not exist, otherwise the found \cppinline{User} object.
-        \item 
-            \cppinline{std::variant} is a type-safe union that can hold exactly one of several types. 
-            A \cppinline{std::tuple} is a fixed-size collection of the same types.
-            Therefore a \cppinline{std::variant} is more compact memory-wise than a \cppinline{std::tuple}, 
-            because it only needs to store the size of the largest type, while a \cppinline{std::tuple} 
-            needs to store the size of each type.
-        \item  
-            \cppinline{std::pair} and \cppinline{std::complex} give their two
-            components a fixed semantic meaning (first/second,
-            real/imaginary) and always contain exactly two elements.  
-            In contrast, \cppinline{std::tuple} and \cppinline{std::array} are
-            purely structural containers whose members are accessed by
-            position and have no predefined interpretation.
+\section*{2.1 Performance Analysis of Reduce and Transform}
 
-        \item  
-            \cppinline{std::pair} and \cppinline{std::tuple} can store
-            heterogeneous types (each element may have a different
-            type).  
-            \cppinline{std::array<T, N>} and \cppinline{std::complex<T>}
-            are homogeneous: every stored value has the same type
-            \cppinline{T} (and, for \cppinline{std::complex}, there are always
-            exactly two such values).
+The benchmark results in Figure~\ref{fig:simd_reduce_output} and Table~\ref{tab:simd_reduce_output} show a clear performance improvement when using SIMD-based implementations over the baseline STL version.
+The reduce benchmarks reveal that SIMD vectorization significantly increases throughput, particularly in custom-controlled vertical implementations.
 
-        \item  
-            \cppinline{std::complex<T>} is a domain-specific numeric
-            abstraction: beyond holding two values, it models the algebra
-            of complex numbers and overloads arithmetic operators
-            (`+`, `-`, `*`, `/`, `abs`, `arg`, …).
-            The other templates are generic containers and provide no
-            mathematical behaviour on their own.
-    \end{enumerate}
-\end{problem}
+The baseline STL version (\texttt{benchReduceStl}) achieves only about 9.93~GB/s, which serves as a reference point for comparison.
+In contrast, SIMD-based and OpenMP-assisted variants such as \texttt{benchReduceSimdStl}, \texttt{benchReduceOmpIterator}, and \texttt{benchReduceOmpRange} all reach approximately 16~GB/s, demonstrating the benefit of vectorized addition and loop-level optimizations.
+The highest performance is observed in \texttt{benchReduceSimdXVertical} with 19.71~GB/s, which clearly outperforms the other implementations and reflects efficient register-level parallelism.
 
-\begin{problem}{}{Task 1.2.x}
-    \begin{enumerate}[(1)]
-        \item Documented code including test inside file \cppinline{main-121.cpp}.
-        \item Documented code including test inside file \cppinline{main-122.cpp}.
-        \item Documented code including test inside file \cppinline{main-123.cpp}.
-    \end{enumerate}
-\end{problem}
+Interestingly, aligned and horizontal SIMD versions perform slightly worse than the vertical one, suggesting that memory alignment does not always translate into higher throughput in practice.
+Figure~\ref{fig:simd_transform_output} and Table~\ref{tab:simd_transform_output} show the transform benchmarks, which achieve significantly higher throughput overall.
+
+Even the STL baseline version (\texttt{benchTransformStl}) reaches nearly 30~GB/s, indicating that this operation is already efficiently implemented and not severely bottlenecked by compute.
+Most transform implementations—including loop variants, STL-based, and OpenMP-assisted—cluster tightly around 29--30~GB/s, showing only minor variation.
+
+The top performer is \texttt{XsimdTransform} at 30.53~GB/s, closely followed by \\
+\texttt{OmpSimdTransformRangeInnerLoop}.
+This confirms that transform is likely memory-bound, and further parallelization or vectorization provides only limited gains.
+
+Overall, the reduce benchmark benefits more clearly from explicit SIMD optimization, while transform shows high performance even without it due to its inherent memory-access characteristics.
+
+\pagebreak
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/simd_reduce_output.txt_ex02.png}
+    \caption{Reduce benchmark results (throughput vs. implementation)}
+    \label{fig:simd_reduce_output}
+\end{figure}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Benchmark}         & \textbf{Throughput [GB/s]} \\
+        \hline
+        benchReduceStl             & 9.93                       \\
+        benchReduceSimdStl         & 16.05                      \\
+        benchReduceSimdXVertical   & \textbf{19.71}             \\
+        benchReduceSimdXHorizontal & 12.75                      \\
+        benchReduceSimdXAlign      & 12.67                      \\
+        benchReduceOmpIterator     & 16.05                      \\
+        benchReduceOmpRange        & 16.14                      \\
+        \hline
+    \end{tabular}
+    \caption{Throughput results of reduce benchmarks}
+    \label{tab:simd_reduce_output}
+\end{table}
+
+\pagebreak
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/simd_transform_output.txt_ex02.png}
+    \caption{Transform benchmark results (throughput vs. implementation)}
+    \label{fig:simd_transform_output}
+\end{figure}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Benchmark}                  & \textbf{Throughput [GB/s]} \\
+        \hline
+        benchTransformStl                   & 29.82                      \\
+        benchTransformSimdStl               & 29.78                      \\
+        benchTransformRangeInnerLoop        & 29.75                      \\
+        benchTransformIteratorInnerLoop     & 29.77                      \\
+        benchOmpSimdTransformRangeInnerLoop & \textbf{30.51}             \\
+        benchXsimdTransform                 & \textbf{30.53}             \\
+        benchXsimdTransformAligned          & 29.10                      \\
+        \hline
+    \end{tabular}
+    \caption{Throughput results of transform benchmarks}
+    \label{tab:simd_transform_output}
+\end{table}
+
+\pagebreak
+
+\section*{2.2 Adapting reduce and transform}
+
+
 
 \end{document}

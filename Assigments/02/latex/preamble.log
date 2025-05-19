@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.28)  28 APR 2025 13:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.28)  19 MAY 2025 19:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/01/preamble.tex
-(c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/01/preamble.tex
+**c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/preamble.tex
+(c:/Users/Konst/Documents/git/HD_CPUAD/Assigments/02/latex/preamble.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-03-26>
 (c:/texlive/2025/texmf-dist/tex/latex/base/article.cls
@@ -31,14 +31,17 @@ Package: babel 2025/04/14 v25.7 The multilingual framework for pdfLaTeX, LuaLaTe
  (c:/texlive/2025/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
 \bbl@dirlevel=\count272
- (c:/texlive/2025/texmf-dist/tex/generic/babel-german/german.ldf
-Language: german 2024/12/10 v2.15 German support for babel (pre-1996 orthography)
- (c:/texlive/2025/texmf-dist/tex/generic/babel-german/germanb.ldf
-Language: germanb 2024/12/10 v2.15 German support for babel (pre-1996 orthography)
-Package babel Info: Making " an active character on input line 139.
-))) (c:/texlive/2025/texmf-dist/tex/generic/babel/locale/de/babel-german.tex
-Package babel Info: Importing font and identification data for german
-(babel)             from babel-de-1901.ini. Reported on input line 25.
+ (c:/texlive/2025/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2017/06/06 v3.3r English support from the babel system
+Package babel Info: Hyphen rules for 'canadian' set to \l@english
+(babel)             (\language0). Reported on input line 102.
+Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
+(babel)             (\language22). Reported on input line 105.
+Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
+(babel)             (\language22). Reported on input line 108.
+)) (c:/texlive/2025/texmf-dist/tex/generic/babel/locale/en/babel-english.tex
+Package babel Info: Importing font and identification data for english
+(babel)             from babel-en.ini. Reported on input line 11.
 ) (c:/texlive/2025/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks17
@@ -721,17 +724,17 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 Package hyperref Info: Option `colorlinks' set `true' on input line 81.
 )
 ! Emergency stop.
-<*> ...nts/git/HD_CPUAD/Assigments/01/preamble.tex
+<*> ...t/HD_CPUAD/Assigments/02/latex/preamble.tex
                                                   
 *** (job aborted, no legal \end found)
 
  
 Here is how much of TeX's memory you used:
- 23640 strings out of 469626
- 400880 string characters out of 5475183
- 1028651 words of memory out of 5000000
- 50243 multiletter control sequences out of 15000+600000
+ 23552 strings out of 469626
+ 399719 string characters out of 5475183
+ 1027249 words of memory out of 5000000
+ 50158 multiletter control sequences out of 15000+600000
  627887 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,0n,77p,454b,397s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 73i,0n,77p,460b,397s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

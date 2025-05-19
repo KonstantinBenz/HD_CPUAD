@@ -6,8 +6,11 @@ names = []
 avg_times = []
 stdev_times = []
 
+#filename= 'simd_reduce_output.txt'
+filename= 'simd_transform_output.txt'
+
 # Read CSV file, change the name of the file to read a different file
-with open('ex02out.txt', 'r') as file:
+with open(filename, 'r') as file:
     reader = csv.DictReader(file)
     for row in reader:
         names.append(row['name'])
@@ -26,4 +29,4 @@ plt.tight_layout()
 
 
 # save the plot, you can also change this
-plt.savefig("ex02.png")
+plt.savefig(filename + "_ex02.png")

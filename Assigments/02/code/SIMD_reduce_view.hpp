@@ -53,13 +53,15 @@ public:
         // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto data = views::repeat(Real(1.0f), N); // no memory access
 
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // TODO
+            for (Real x : data)
+                sum += x;
         }
+
         p_log << "Iterator \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
@@ -69,13 +71,15 @@ public:
         // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto data = views::repeat(Real(1.0f), N);
 
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // TODO
+            ranges::for_each(data, [&](Real x)
+                             { sum += x; });
         }
+
         p_log << "Range \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
@@ -85,12 +89,13 @@ public:
         // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto data = views::repeat(Real(1.0f), N);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            sum = accumulate(begin(data), end(data), Real(0.0f));
         }
+
         p_log << "Stl \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
@@ -99,12 +104,13 @@ public:
         // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto data = views::repeat(Real(1.0f), N);
 
         for (auto _ : p_loop_state)
         {
-            // TODO
+            sum = reduce(stExec, begin(data), end(data), Real(0.0f));
         }
+
         p_log << "SimdStl \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
@@ -114,13 +120,13 @@ public:
         // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto data = views::repeat(Real(1.0f), N);
 
         for (auto _ : p_loop_state)
         {
-            sum = 0;
-            // TODO
+            sum = reduce(mtExec, begin(data), end(data), Real(0.0f));
         }
+
         p_log << "OmpIterator \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
@@ -130,13 +136,13 @@ public:
         // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        // TODO
+        auto data = views::repeat(Real(1.0f), N);
 
         for (auto _ : p_loop_state)
         {
-            sum = 0;
-            // TODO
+            sum = reduce(mtExec, begin(data), end(data), Real(0.0f));
         }
+
         p_log << "OmpRange \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
