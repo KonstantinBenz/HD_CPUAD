@@ -1,4 +1,3 @@
-
 #include "utilities.hpp"
 #include <random>
 #include <iostream>
@@ -37,11 +36,11 @@ public:
     using Real = float;
     using CReal = complex<Real>;
     template <typename T>
-    using Container = vector<T, allocator<T>>; // TODO use no-init-allocator
+    using Container = vector<T, allocator<T>>;
     template <typename T>
     using AlignedContainer = std::vector<T, xsimd::default_allocator<T>>;
-    static constexpr auto stExec = execution::unseq;     // single-threaded execution policy
-    static constexpr auto mtExec = execution::par_unseq; // multi-threaded execution policy
+    static constexpr auto stExec = execution::unseq;
+    static constexpr auto mtExec = execution::par_unseq;
 
     static constexpr Index default_n = 3;
     static constexpr Index default_m = 2;
@@ -50,115 +49,97 @@ public:
 
     auto benchReduceIterator(Index N = default_N)
     {
-        // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
-        auto data = views::repeat(Real(1.0f), N); // no memory access
-
+        auto data = views::repeat(Real(1.0f), N);
         for (auto _ : p_loop_state)
         {
             sum = 0;
             for (Real x : data)
                 sum += x;
         }
-
         p_log << "Iterator \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
 
     auto benchReduceRange(Index N = default_N)
     {
-        // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
         auto data = views::repeat(Real(1.0f), N);
-
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            ranges::for_each(data, [&](Real x)
-                             { sum += x; });
+            ranges::for_each(data, [&](Real x) { sum += x; });
         }
-
         p_log << "Range \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
 
     auto benchReduceStl(Index N = default_N)
     {
-        // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
         auto data = views::repeat(Real(1.0f), N);
-
         for (auto _ : p_loop_state)
         {
             sum = accumulate(begin(data), end(data), Real(0.0f));
         }
-
         p_log << "Stl \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
+
     auto benchReduceSimdStl(Index N = default_N)
     {
-        // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
         auto data = views::repeat(Real(1.0f), N);
-
         for (auto _ : p_loop_state)
         {
             sum = reduce(stExec, begin(data), end(data), Real(0.0f));
         }
-
         p_log << "SimdStl \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
 
     auto benchReduceSimdOmpIterator(Index N = default_N)
     {
-        // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
         auto data = views::repeat(Real(1.0f), N);
-
         for (auto _ : p_loop_state)
         {
             sum = reduce(mtExec, begin(data), end(data), Real(0.0f));
         }
-
         p_log << "OmpIterator \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
 
     auto benchReduceSimdOmpRange(Index N = default_N)
     {
-        // Do not change
         Real sum;
         Index Nout = min(N, default_Nout);
         auto data = views::repeat(Real(1.0f), N);
-
         for (auto _ : p_loop_state)
         {
             sum = reduce(mtExec, begin(data), end(data), Real(0.0f));
         }
-
         p_log << "OmpRange \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
     }
 
     auto benchReduceSimdXHorizontal(Index N = default_N)
     {
-        // Do not change
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         Real sum;
-        Index Nout = min(N, default_Nout);
-        // TODO
+        std::array<Real, 3 * simd_width> data;
+        data.fill(1.0f);
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // TODO
+            batch b = batch::load_unaligned(data.data());
+            sum = xsimd::reduce(b);
         }
         p_log << "xsimd_Horizontal \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
@@ -166,16 +147,19 @@ public:
 
     auto benchReduceSimdXVertical(Index N = default_N)
     {
-        // Do not change
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         Real sum;
-        Index Nout = min(N, default_Nout);
-        // TODO
+        std::array<Real, 3 * simd_width> data;
+        data.fill(1.0f);
         for (auto _ : p_loop_state)
         {
-            sum = 0;
-            // TODO
+            batch acc = batch(0.0f);
+            for (size_t i = 0; i < simd_width; ++i)
+            {
+                acc += batch::load_unaligned(data.data() + i);
+            }
+            sum = xsimd::reduce(acc);
         }
         p_log << "xsimd_Vertical\t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
@@ -183,16 +167,19 @@ public:
 
     auto benchReduceSimdXAlign(Index N = default_N)
     {
-        // Do not change
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         Real sum;
-        Index Nout = min(N, default_Nout);
-        // TODO
+        std::array<Real, 3 * simd_width> data;
+        data.fill(1.0f);
         for (auto _ : p_loop_state)
         {
-            sum = 0;
-            // TODO
+            batch acc = batch(0.0f);
+            for (size_t i = 0; i < simd_width; ++i)
+            {
+                acc += batch::load_aligned(data.data() + i);
+            }
+            sum = xsimd::reduce(acc);
         }
         p_log << "xsimd_aligned \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
