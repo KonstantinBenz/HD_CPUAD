@@ -70,7 +70,8 @@ public:
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            ranges::for_each(data, [&](Real x) { sum += x; });
+            ranges::for_each(data, [&](Real x)
+                             { sum += x; });
         }
         p_log << "Range \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
@@ -139,7 +140,7 @@ public:
         {
             sum = 0;
             batch b = batch::load_unaligned(data.data());
-            sum = xsimd::reduce(b);
+            sum = xsimd::reduce(std::plus<>(), b);
         }
         p_log << "xsimd_Horizontal \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
@@ -159,7 +160,7 @@ public:
             {
                 acc += batch::load_unaligned(data.data() + i);
             }
-            sum = xsimd::reduce(acc);
+            sum = xsimd::reduce(std::plus<>(), acc);
         }
         p_log << "xsimd_Vertical\t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
@@ -179,7 +180,7 @@ public:
             {
                 acc += batch::load_aligned(data.data() + i);
             }
-            sum = xsimd::reduce(acc);
+            sum = xsimd::reduce(std::plus<>(), acc);
         }
         p_log << "xsimd_aligned \t" << sum << '\n';
         return tuple{N * sizeof(Real), 0};
