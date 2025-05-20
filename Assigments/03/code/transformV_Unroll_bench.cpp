@@ -13,10 +13,10 @@ int main(){
     transform_LoopUnrolling_view<ClockRecorder> test(rec);
 	
 	std::cout << "name,size,avg throughput,avg time,stdev time,cv\n";
-	// benchmarker(&test, &transform::benchTransformOmpSimd, "benchTransformOmpSimd", Nl, Nh, dur, timings,rec);
-	// benchmarker(&test, &transform::benchTransformDirectiveUnroll, "benchTransformDirectiveUnroll", Nl, Nh, dur, timings,rec);
-	// benchmarker(&test, &transform::benchTransformDirectiveUnrollFactor64, "benchTransformDirectiveUnrollFactor64", Nl, Nh, dur, timings,rec);
-	// benchmarker(&test, &transform::benchTransformUnrollManual, "benchTransformUnrollManual", Nl, Nh, dur, timings,rec);
+	benchmarker(&test, &transform::benchTransformOmpSimd, "benchTransformOmpSimd", Nl, Nh, dur, timings,rec);
+	benchmarker(&test, &transform::benchTransformDirectiveUnroll, "benchTransformDirectiveUnroll", Nl, Nh, dur, timings,rec);
+	benchmarker(&test, &transform::benchTransformDirectiveUnrollFactor64, "benchTransformDirectiveUnrollFactor64", Nl, Nh, dur, timings,rec);
+	benchmarker(&test, &transform::benchTransformUnrollManual, "benchTransformUnrollManual", Nl, Nh, dur, timings,rec);
 	// benchmarker(&test, &transform::benchTransformUnrollLoopPeeling, "benchTransformUnrollLoopPeeling", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchTransformUnrollLoopPeelingDirective, "benchTransformUnrollLoopPeelingDirective", Nl, Nh, dur, timings,rec);
 	
