@@ -6,8 +6,8 @@ names = []
 avg_times = []
 stdev_times = []
 
-#filename= 'reduce_results.csv'
-filename= 'transform_results.csv'
+filename= 'reduce_results.csv'
+#filename= 'transform_results.csv'
 
 # Read CSV file, change the name of the file to read a different file
 with open(filename, 'r') as file:

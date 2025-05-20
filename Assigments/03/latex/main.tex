@@ -72,20 +72,66 @@ The implementation successfully compiles and runs within the benchmark target \\
 
 \subsection*{Horizontal}
 
-The function \cppinline{benchReduceUnrollSimdXHorizontal} performs a flat reduction of all elements within an \cppinline{unroll\_factor}-sized block. 
+The function \cppinline{benchReduceUnrollSimdXHorizontal} performs a flat reduction of all elements within an \cppinline{unroll\_factor}-sized block.
 Each SIMD batch of \cppinline{simd\_width} elements is summed and accumulated into a single SIMD register, which is then reduced to scalar using \cppinline{xsimd::reduce\_add}.
 
 \subsection*{Vertical}
 
-The function \cppinline{benchReduceUnrollSimdXVertical} uses a tree-like structure of SIMD lanes. 
-It maintains \cppinline{unroll\_factor / simd\_width} SIMD accumulators, one for each logical reduction path. 
+The function \cppinline{benchReduceUnrollSimdXVertical} uses a tree-like structure of SIMD lanes.
+It maintains \cppinline{unroll\_factor / simd\_width} SIMD accumulators, one for each logical reduction path.
 Input vectors are dispatched into different SIMD accumulators in parallel. The final scalar result is obtained by reducing all lanes individually.
 
 \pagebreak
 
-\section*{3.5 Benchmarking}
+\section*{3.5 Benchmarking and Performance Analysis}
 
+\subsection*{Reduce Benchmarks}
 
+Figure~\ref{fig:reduce} shows the average execution time of all reduce benchmark variants.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/reduce_results.csv_ex02.png}
+    \caption{Reduce variants: average execution time with standard deviation.}
+    \label{fig:reduce}
+\end{figure}
+
+The results show that:
+\begin{itemize}
+    \item \cppinline{benchReduceUnrollTree} performs best in terms of runtime. Its logarithmic reduction depth and low overhead make it ideal for large-scale reductions.
+    \item \cppinline{benchReduceUnrollManual} performs significantly worse than expected. This is likely due to poor compiler optimization of the 64 manually unrolled assignments without SIMD vectorization.
+    \item Surprisingly, \cppinline{benchReduceUnrollSimdXHorizontal} performs \emph{worse} than all others. This may be due to register spilling or poor instruction scheduling on our test hardware.
+    \item The best trade-off between performance and implementation effort is found in \cppinline{benchReduceUnrollTreeDirective}, though it is still slower than the plain \cppinline{...Tree} version.
+\end{itemize}
+
+\subsection*{Transform Benchmarks}
+
+Figure~\ref{fig:transform} shows the average execution time of all transform variants.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/transform_results.csv_ex02.png}
+    \caption{Transform variants: average execution time with standard deviation.}
+    \label{fig:transform}
+\end{figure}
+
+We observe:
+\begin{itemize}
+    \item \cppinline{benchTransformUnrollManual} is by far the slowest variant. This confirms that the compiler cannot effectively vectorize the hand-unrolled code without specific SIMD intrinsics or pragma hints.
+    \item \cppinline{benchTransformUnrollLoopPeelingDirective} outperforms all others. This confirms the performance benefit of vectorized unroll-peeling combined with efficient loop directives and use of XSIMD.
+    \item All directive-based unrolling versions perform similarly, with slight improvements at unroll factor 64.
+\end{itemize}
+
+\subsection*{Conclusion}
+
+The benchmarking highlights that:
+\begin{itemize}
+    \item Tree-based reductions scale best for large problem sizes and should be preferred for high-performance compute-bound kernels.
+    \item Manual unrolling does not guarantee performance improvements and should be avoided unless paired with SIMD-aware instructions.
+    \item XSIMD-based loop peeling with directive unrolling delivers the best transform performance, especially when combined with constant unroll factors and proper modulo-based indexing.
+\end{itemize}
+
+Overall, the benchmark confirms that compiler-guided vectorization and algorithmic restructuring (tree reduction, loop peeling) are more effective than naïve hand-unrolling.
 
 
 \end{document}
