@@ -1,0 +1,8 @@
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/exec_SIMD_transform.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/exec_SIMD_reduce.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/benchmarkSIMDreduce.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/benchmarkSIMDtransform.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/benchmarkSIMDtransformV.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/benchmarkSIMDreduceV.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/edit_cache.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/02/code/build/CMakeFiles/rebuild_cache.dir
