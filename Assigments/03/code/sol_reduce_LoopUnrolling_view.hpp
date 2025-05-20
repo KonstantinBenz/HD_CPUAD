@@ -552,7 +552,7 @@ public:
             sum = 0;
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
-                batch block_sum = xsimd::batch<Real>::zero();
+                batch block_sum(0);
 
                 // Loop over all sub-blocks inside unroll_factor
                 for (Index j = 0; j < unroll_factor; j += simd_width)
@@ -602,7 +602,7 @@ public:
             // Create multiple SIMD lanes
             std::array<batch, unroll_factor / simd_width> accumulators;
             for (auto &acc : accumulators)
-                acc = batch::zero();
+                acc = batch(0);
 
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
