@@ -399,14 +399,24 @@ public:
                 for (Index j = 0; j < unroll_factor; j += simd_width)
                 {
                     // Load V and W
-                    batch v_vec = batch::load_unaligned(&V[i + j]);
-                    batch w_vec = batch::load_unaligned(&W[(i + j) % 256]);
+                    std::array<Real, simd_width> temp_v;
+                    for (Index k = 0; k < simd_width; ++k)
+                        temp_v[k] = V[i + j + k];
 
-                    // Compute: a * V + W
+                    batch v_vec = batch::load_unaligned(temp_v.data());
+                    std::array<Real, simd_width> temp_w;
+                    for (Index k = 0; k < simd_width; ++k)
+                        temp_w[k] = W[(i + j + k) % 256];
+
+                    batch w_vec = batch::load_unaligned(temp_w.data());
+
+                    // SIMD-Berechnung
                     w_vec = a_vec * v_vec + w_vec;
 
-                    // Store result back (modulo write)
-                    w_vec.store_unaligned(&W[(i + j) % 256]);
+                    // zurückspeichern
+                    w_vec.store_unaligned(temp_w.data());
+                    for (Index k = 0; k < simd_width; ++k)
+                        W[(i + j + k) % 256] = temp_w[k];
                 }
             }
 
