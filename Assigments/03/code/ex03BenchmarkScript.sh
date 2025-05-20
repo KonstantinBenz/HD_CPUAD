@@ -1,23 +1,18 @@
-#!/bin/bash
-#SBATCH --job-name=ex03_benchmark
-#SBATCH --output=ex03_benchmark_%j.out
-#SBATCH --error=ex03_benchmark_%j.err
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --partition=exercise
-#SBATCH --time=00:30:00
+#!/usr/bin/env bash
+#SBATCH -p rome
+#SBATCH -w asc-rome00
+#SBATCH --exclusive
+#SBATCH -o ex03_benchmark.out
 
-# Load environment (falls nicht automatisch)
-source ../load_env_CPUAD.sh
+export OMP_PLACES=numa_domains
+export OMP_PROC_BIND=true
 
-# Optional: in build-Verzeichnis wechseln
-cd "$(dirname "$0")"
+cd /media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build
 
-echo "Running reduce benchmarks..."
+echo "Starting REDUCE benchmark..."
 ./reduceVbenchmarkUnroll > reduce_results.csv
 
-echo "Running transform benchmarks..."
+echo "Starting TRANSFORM benchmark..."
 ./transformVbenchmarkUnroll > transform_results.csv
 
-echo "Benchmarking done."
+echo "All benchmarks completed."
