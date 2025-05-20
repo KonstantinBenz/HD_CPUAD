@@ -1,0 +1,9 @@
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/exec_transform_Unroll.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/exec_reduce_Unroll.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/reducebenchmarkUnroll.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/reduceVbenchmarkUnroll.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/transformbenchmarkUnroll.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/transformVbenchmarkUnroll.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/benchUnrollFactor.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/edit_cache.dir
+/media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build/CMakeFiles/rebuild_cache.dir
