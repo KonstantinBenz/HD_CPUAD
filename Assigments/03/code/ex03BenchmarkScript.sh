@@ -9,8 +9,8 @@ export OMP_PROC_BIND=true
 
 cd /media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code/build
 
-echo "Starting REDUCE benchmark..."
-./reduceVbenchmarkUnroll > reduce_results.csv
+#echo "Starting REDUCE benchmark..."
+#./reduceVbenchmarkUnroll > reduce_results.csv
 
 echo "Starting TRANSFORM benchmark..."
 ./transformVbenchmarkUnroll > transform_results.csv
