@@ -18,10 +18,10 @@ int main(){
 	benchmarker(&test, &transform::benchTransformDirectiveUnrollFactor64, "benchTransformDirectiveUnrollFactor64", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchTransformUnrollManual, "benchTransformUnrollManual", Nl, Nh, dur, timings,rec);
 	benchmarker(&test, &transform::benchTransformUnrollLoopPeeling, "benchTransformUnrollLoopPeeling", Nl, Nh, dur, timings,rec);
-	// benchmarker(&test, &transform::benchTransformUnrollLoopPeelingDirective, "benchTransformUnrollLoopPeelingDirective", Nl, Nh, dur, timings,rec);
+	benchmarker(&test, &transform::benchTransformUnrollLoopPeelingDirective, "benchTransformUnrollLoopPeelingDirective", Nl, Nh, dur, timings,rec);
 	
 
-    // std::cout << test.get_log();
+    std::cout << test.get_log();
 
 	return 0;
 }
