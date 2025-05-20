@@ -293,6 +293,10 @@ public:
         // TODO
         V = views::iota(0, N);       // values: 0,1,2,...,N-1
         W = vector<Real>(256, 1.0f); // fixed-size output buffer
+
+        using batch = xsimd::batch<Real>;
+        constexpr auto simd_width = batch::size;
+        static_assert(unroll_factor % simd_width == 0, "Unroll factor must be divisible by SIMD width");
         // --------
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
