@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.28)  20 MAY 2025 11:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.28)  20 MAY 2025 11:15
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1127,15 +1127,20 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Overfull \hbox (62.31107pt too wide) in paragraph at lines 20--25
-\T1/cmr/m/n/12 (-20) The in-put con-tain-ers in \T1/cmtt/m/n/12 reduce_LoopUnrolling_view.hpp \T1/cmr/m/n/12 (-20) and \T1/cmtt/m/n/12 transform_LoopUnrolling_view.hpp
+Overfull \hbox (6.83888pt too wide) in paragraph at lines 20--26
+\T1/cmr/m/n/12 (-20) For the trans-form rou-tines, the in-put val-ues were changed to \T1/cmtt/m/n/12 std::ranges::views::iota(0,
+ []
+
+
+Overfull \hbox (14.39655pt too wide) in paragraph at lines 20--26
+\T1/cmtt/m/n/12 N)\T1/cmr/m/n/12 (-20) . Ad-di-tion-ally, the out-put con-tainer \T1/cmtt/m/n/12 W \T1/cmr/m/n/12 (-20) was re-placed by a fixed-size \T1/cmtt/m/n/12 std::vector<Real>(256)
  []
 
 
 
 [1
 
-{c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+{c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
 
 [2]
 
@@ -1155,18 +1160,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 40038 strings out of 469626
- 776042 string characters out of 5475183
- 1655804 words of memory out of 5000000
- 66285 multiletter control sequences out of 15000+600000
- 634013 words of font info for 65 fonts, out of 8000000 for 9000
+ 40064 strings out of 469626
+ 776415 string characters out of 5475183
+ 1661804 words of memory out of 5000000
+ 66294 multiletter control sequences out of 15000+600000
+ 635533 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  121i,5n,124p,1255b,1775s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfsx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfsx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on main.pdf (5 pages, 109705 bytes).
+<c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfsx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfsx1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on main.pdf (5 pages, 127493 bytes).
 PDF statistics:
- 63 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 72 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  6 named destinations out of 1000 (max. 500000)
- 14861 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 18957 words of extra memory for PDF output out of 20736 (max. 10000000)
 

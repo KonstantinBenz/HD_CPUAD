@@ -17,11 +17,26 @@
 
 \section*{3.1 Adapting reduce and transform}
 
-The input containers in \texttt{reduce\_LoopUnrolling\_view.hpp} and \texttt{transform\_LoopUnrolling\_view.hpp} have been adapted as requested.
-For the reduction routines, \texttt{std::views::repeat(1.0f, N)} is used to replace the original memory-backed containers. This ensures that the workload is compute-bound rather than memory-bound.
-For the transform routines, \texttt{std::ranges::views::iota(0, N)} is used for the input range, and the output container \texttt{W} is a fixed-size \texttt{std::vector<Real>(256)} with modulo indexing.
+The input containers in \texttt{reduce\_LoopUnrolling\_view.hpp} and 
 \\
-All adapted benchmark functions were successfully compiled and tested using the executables \texttt{reduceVbenchmarkUnroll} and \texttt{transformVbenchmarkUnroll} on the target system.
+\texttt{transform\_LoopUnrolling\_view.hpp} were adapted to use range-based views as requested in the assignment.
+In the reduction routines, the memory-backed containers were replaced with \texttt{std::views::repeat(1.0f, N)}, using \texttt{decltype(std::views::repeat(...))} to define a compatible member variable. This makes the code compute-bound and avoids unnecessary memory usage.
+\\
+For the transform routines, the input values were changed to \texttt{std::ranges::views::iota(0, N)}. Additionally, the output container \texttt{W} was replaced by a fixed-size \texttt{std::vector<Real>(256)} with modulo-indexed access to enable reuse of the output buffer and simulate non-memory-bound processing.
+
+\textbf{Challenges encountered:}
+\begin{itemize}
+    \item Initially, the range variables \texttt{V} and \texttt{W} were only declared inside each function. However, since multiple functions need access to them, we had to promote them to class-level member variables.
+    \item Using \texttt{std::views::repeat} or \texttt{std::views::iota} as class members required careful type declarations. Simple type aliases like \texttt{std::ranges::repeat\_view} or \texttt{std::ranges::iota\_view} caused type mismatch errors when assigning views with bounds.
+    \item The correct approach was to use \texttt{decltype(std::views::repeat(...))} and \\
+    \texttt{decltype(std::views::iota(...))} for the member declarations, as this ensured compatibility with the generated view types and compiler support on the cluster (GCC 14).
+    \item Some loops were not vectorized according to compiler warnings. Since manual unrolling was explicitly requested in the assignment, we did not attempt further refactoring in these cases.
+\end{itemize}
+
+All modified functions were compiled and tested successfully via the targets \\
+\texttt{reduceVbenchmarkUnroll} and \texttt{transformVbenchmarkUnroll}.
+
+\pagebreak
 
 \pagebreak
 

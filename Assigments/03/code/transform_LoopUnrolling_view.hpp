@@ -370,48 +370,58 @@ public:
         p_log << "UnrollLoopPeeling\t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
-    /*
-        auto benchTransformUnrollLoopPeelingDirective(Index N = default_N)
+    auto benchTransformUnrollLoopPeelingDirective(Index N = default_N)
+    {
+        Real a = -1.0f;
+        using batch = xsimd::batch<Real>;
+        constexpr auto simd_width = batch::size;
+
+        constexpr auto unroll_factor = UNROLLFACTOR;
+        static_assert(unroll_factor % simd_width == 0, "Unroll factor must be divisible by SIMD width");
+
+        N = N % unroll_factor ? N : N + 1;
+        auto rem = N % unroll_factor;
+
+        // Initialize V as iota-view and W as fixed-size vector
+        V = std::views::iota(0, N);       // input: 0, 1, 2, ..., N-1
+        W = std::vector<Real>(256);       // output buffer with modulo access
+        std::iota(W.begin(), W.end(), 2); // fill with 2, 3, 4, ...
+
+        Index Nout = std::min(N, default_Nout);
+        for (auto _ : p_loop_state)
         {
-            // Do not change
-            Real a = -1.0f;
-            using batch = xsimd::batch<Real>;
-            constexpr auto simd_width = batch::size;
+            batch a_vec(a);
 
-            constexpr auto unroll_factor = UNROLLFACTOR;
-            N = N % unroll_factor ? N : N + 1;
-            auto rem = N % unroll_factor;
-
-            // TODO
-
-            // --------
-
-            Index Nout = min(N, default_Nout);
-            for (auto _ : p_loop_state)
+#pragma omp simd
+            for (Index i = 0; i < N - rem; i += unroll_factor)
             {
-                batch a_vec(-1.0f);
-
-    #pragma omp simd
-                for (Index i = 0; i < N - rem; i += unroll_factor)
+#pragma unroll
+                for (Index j = 0; j < unroll_factor; j += simd_width)
                 {
+                    // Load V and W
+                    batch v_vec = batch::load_unaligned(&V[i + j]);
+                    batch w_vec = batch::load_unaligned(&W[(i + j) % 256]);
 
-    #pragma unroll
+                    // Compute: a * V + W
+                    w_vec = a_vec * v_vec + w_vec;
 
-                    // TODO
-
-                    // --------
+                    // Store result back (modulo write)
+                    w_vec.store_unaligned(&W[(i + j) % 256]);
                 }
-    #pragma omp simd
-                for (Index i = N - rem; i < N; i++)
-                {
-                    W[i] = a * V[i] + W[i];
-                }
-                p_loop_action();
             }
-            p_log << "UnrollLoopPeelingDirective\t" << views::take(W, Nout) << '\n';
-            return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
+
+#pragma omp simd
+            for (Index i = N - rem; i < N; i++)
+            {
+                W[i % 256] = a * V[i] + W[i % 256];
+            }
+
+            p_loop_action();
         }
-            */
+
+        p_log << "UnrollLoopPeelingDirective\t" << views::take(W, Nout) << '\n';
+        return std::tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
+    }
 };
 template <typename R, typename L>
 array<char, 1> transform_LoopUnrolling_view<R, L>::p_one = {0};
