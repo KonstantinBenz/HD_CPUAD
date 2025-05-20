@@ -284,43 +284,94 @@ public:
 
     auto benchTransformUnrollLoopPeeling(Index N = default_N)
     {
+        // Do not change
         Real a = -1.0f;
-        constexpr auto unroll_factor = UNROLLFACTOR;
+        constexpr auto unroll_factor = 64;
+        N = N % unroll_factor ? N : N + 1;
+        auto rem = N % unroll_factor;
 
-        // Initialize V as iota-view (0, 1, 2, ..., N-1)
-        auto V = std::views::iota(0, N);
-
-        // Initialize W as a fixed-size vector with initial values
-        auto W = std::vector<Real>(256, 1.0f);
-
-        // Calculate remainder for loop peeling
-        const Index rem = N % unroll_factor;
-
-        Index Nout = std::min(N, default_Nout);
+        // TODO
+        V = views::iota(0, N);       // values: 0,1,2,...,N-1
+        W = vector<Real>(256, 1.0f); // fixed-size output buffer
+        // --------
+        Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
-            // Main loop with manual unrolling
+#pragma omp simd
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
-                // Manual unroll based on unroll_factor
-                // Here's an example for unroll_factor=64, you'll need to adapt this
-                // based on your UNROLLFACTOR value
-                W[i % 256] = a * V[i] + W[i % 256];
-                W[(i + 1) % 256] = a * V[i + 1] + W[(i + 1) % 256];
-                // ... continue for all iterations up to unroll_factor
-                W[(i + (unroll_factor - 1)) % 256] = a * V[i + (unroll_factor - 1)] + W[(i + (unroll_factor - 1)) % 256];
+                W[i + 0] = a * V[i + 0] + W[i + 0];
+                W[i + 1] = a * V[i + 1] + W[i + 1];
+                W[i + 2] = a * V[i + 2] + W[i + 2];
+                W[i + 3] = a * V[i + 3] + W[i + 3];
+                W[i + 4] = a * V[i + 4] + W[i + 4];
+                W[i + 5] = a * V[i + 5] + W[i + 5];
+                W[i + 6] = a * V[i + 6] + W[i + 6];
+                W[i + 7] = a * V[i + 7] + W[i + 7];
+                W[i + 8] = a * V[i + 8] + W[i + 8];
+                W[i + 9] = a * V[i + 9] + W[i + 9];
+                W[i + 10] = a * V[i + 10] + W[i + 10];
+                W[i + 11] = a * V[i + 11] + W[i + 11];
+                W[i + 12] = a * V[i + 12] + W[i + 12];
+                W[i + 13] = a * V[i + 13] + W[i + 13];
+                W[i + 14] = a * V[i + 14] + W[i + 14];
+                W[i + 15] = a * V[i + 15] + W[i + 15];
+                W[i + 16] = a * V[i + 16] + W[i + 16];
+                W[i + 17] = a * V[i + 17] + W[i + 17];
+                W[i + 18] = a * V[i + 18] + W[i + 18];
+                W[i + 19] = a * V[i + 19] + W[i + 19];
+                W[i + 20] = a * V[i + 20] + W[i + 20];
+                W[i + 21] = a * V[i + 21] + W[i + 21];
+                W[i + 22] = a * V[i + 22] + W[i + 22];
+                W[i + 23] = a * V[i + 23] + W[i + 23];
+                W[i + 24] = a * V[i + 24] + W[i + 24];
+                W[i + 25] = a * V[i + 25] + W[i + 25];
+                W[i + 26] = a * V[i + 26] + W[i + 26];
+                W[i + 27] = a * V[i + 27] + W[i + 27];
+                W[i + 28] = a * V[i + 28] + W[i + 28];
+                W[i + 29] = a * V[i + 29] + W[i + 29];
+                W[i + 30] = a * V[i + 30] + W[i + 30];
+                W[i + 31] = a * V[i + 31] + W[i + 31];
+                W[i + 32] = a * V[i + 32] + W[i + 32];
+                W[i + 33] = a * V[i + 33] + W[i + 33];
+                W[i + 34] = a * V[i + 34] + W[i + 34];
+                W[i + 35] = a * V[i + 35] + W[i + 35];
+                W[i + 36] = a * V[i + 36] + W[i + 36];
+                W[i + 37] = a * V[i + 37] + W[i + 37];
+                W[i + 38] = a * V[i + 38] + W[i + 38];
+                W[i + 39] = a * V[i + 39] + W[i + 39];
+                W[i + 40] = a * V[i + 40] + W[i + 40];
+                W[i + 41] = a * V[i + 41] + W[i + 41];
+                W[i + 42] = a * V[i + 42] + W[i + 42];
+                W[i + 43] = a * V[i + 43] + W[i + 43];
+                W[i + 44] = a * V[i + 44] + W[i + 44];
+                W[i + 45] = a * V[i + 45] + W[i + 45];
+                W[i + 46] = a * V[i + 46] + W[i + 46];
+                W[i + 47] = a * V[i + 47] + W[i + 47];
+                W[i + 48] = a * V[i + 48] + W[i + 48];
+                W[i + 49] = a * V[i + 49] + W[i + 49];
+                W[i + 50] = a * V[i + 50] + W[i + 50];
+                W[i + 51] = a * V[i + 51] + W[i + 51];
+                W[i + 52] = a * V[i + 52] + W[i + 52];
+                W[i + 53] = a * V[i + 53] + W[i + 53];
+                W[i + 54] = a * V[i + 54] + W[i + 54];
+                W[i + 55] = a * V[i + 55] + W[i + 55];
+                W[i + 56] = a * V[i + 56] + W[i + 56];
+                W[i + 57] = a * V[i + 57] + W[i + 57];
+                W[i + 58] = a * V[i + 58] + W[i + 58];
+                W[i + 59] = a * V[i + 59] + W[i + 59];
+                W[i + 60] = a * V[i + 60] + W[i + 60];
+                W[i + 61] = a * V[i + 61] + W[i + 61];
+                W[i + 62] = a * V[i + 62] + W[i + 62];
+                W[i + 63] = a * V[i + 63] + W[i + 63];
             }
-
-// Handle remainder with simple loop
 #pragma omp simd
             for (Index i = N - rem; i < N; i++)
             {
-                W[i % 256] = a * V[i] + W[i % 256];
+                W[i] = a * V[i] + W[i];
             }
-
             p_loop_action();
         }
-
         p_log << "UnrollLoopPeeling\t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
@@ -329,6 +380,9 @@ public:
         Real a = -1.0f;
         constexpr auto unroll_factor = UNROLLFACTOR;
         constexpr auto simd_width = 8; // As specified in the task
+
+        // Define the batch type explicitly
+        using batch = xsimd::batch<Real>;
 
         // Static assert to ensure unroll_factor is divisible by SIMD batch size
         static_assert(unroll_factor % batch::size == 0, "Unroll factor must be divisible by SIMD width");
@@ -342,12 +396,12 @@ public:
         // Initialize W as a fixed-size vector with initial values
         auto W = std::vector<Real>(256, 1.0f);
 
-        // Create a constant SIMD batch for 'a'
-        batch a_vec(a);
-
         Index Nout = std::min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
+            // Create a constant SIMD batch for 'a'
+            batch a_vec(a);
+
 // Use directive-based unrolling with SIMD
 #pragma omp simd
             for (Index i = 0; i < N - rem; i += unroll_factor)
@@ -355,28 +409,32 @@ public:
 #pragma unroll
                 for (Index j = 0; j < unroll_factor; j += simd_width)
                 {
-                    // Create SIMD batch for V directly from the view
-                    // More efficient way to construct the batch as mentioned in the task
-                    batch v_vec;
+                    // Create arrays to hold values before loading them into SIMD batches
+                    std::array<Real, simd_width> v_array;
+                    std::array<Real, simd_width> w_array;
+
+                    // Fill arrays with values
                     for (Index k = 0; k < simd_width; ++k)
                     {
-                        v_vec[k] = static_cast<Real>(V[i + j + k]);
+                        v_array[k] = static_cast<Real>(V[i + j + k]);
+                        w_array[k] = W[(i + j + k) % 256];
                     }
 
-                    // Load values from W with modulo indexing
-                    batch w_vec;
-                    for (Index k = 0; k < simd_width; ++k)
-                    {
-                        w_vec[k] = W[(i + j + k) % 256];
-                    }
+                    // Load arrays into SIMD batches
+                    batch v_vec = batch::load_unaligned(v_array.data());
+                    batch w_vec = batch::load_unaligned(w_array.data());
 
                     // Perform SIMD computation
                     w_vec = a_vec * v_vec + w_vec;
 
-                    // Store results back to W
+                    // Store results back to temporary array
+                    std::array<Real, simd_width> result_array;
+                    w_vec.store_unaligned(result_array.data());
+
+                    // Copy results back to W with modulo indexing
                     for (Index k = 0; k < simd_width; ++k)
                     {
-                        W[(i + j + k) % 256] = w_vec[k];
+                        W[(i + j + k) % 256] = result_array[k];
                     }
                 }
             }
