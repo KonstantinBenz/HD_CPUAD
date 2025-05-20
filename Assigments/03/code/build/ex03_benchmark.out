@@ -1,4 +1,3 @@
 Starting TRANSFORM benchmark...
--rwxr-xr-x 1 he343 urz 124K May 20 13:50 ./transformVbenchmarkUnroll
-/var/lib/slurm/slurmctld/job86922/slurm_script: line 18: 3030381 Segmentation fault      (core dumped) ./transformVbenchmarkUnroll > transform_results.csv 2>&1
+-rwxr-xr-x 1 he343 urz 128K May 20 15:12 ./transformVbenchmarkUnroll
 All benchmarks completed.
