@@ -17,19 +17,18 @@
 
 \section*{3.1 Adapting reduce and transform}
 
-The input containers in \texttt{reduce\_LoopUnrolling\_view.hpp} and 
-\\
-\texttt{transform\_LoopUnrolling\_view.hpp} were adapted to use range-based views as requested in the assignment.
-In the reduction routines, the memory-backed containers were replaced with \texttt{std::views::repeat(1.0f, N)}, using \texttt{decltype(std::views::repeat(...))} to define a compatible member variable. This makes the code compute-bound and avoids unnecessary memory usage.
-\\
-For the transform routines, the input values were changed to \texttt{std::ranges::views::iota(0, N)}. Additionally, the output container \texttt{W} was replaced by a fixed-size \texttt{std::vector<Real>(256)} with modulo-indexed access to enable reuse of the output buffer and simulate non-memory-bound processing.
+The input containers in \cppinline{reduce\_LoopUnrolling\_view.hpp} and \\
+\cppinline{transform\_LoopUnrolling\_view.hpp} were adapted to use range-based views as requested in the assignment. \\
+In the reduction routines, the memory-backed containers were replaced with \cppinline{std::views::repeat(1.0f, N)},
+using \cppinline{decltype(std::views::repeat(...))} to define a compatible member variable. This makes the code compute-bound and avoids unnecessary memory usage. \\
+For the transform routines, the input values were changed to \cppinline{std::ranges::views::iota(0, N)}. Additionally, the output container \cppinline{W} was replaced by a fixed-size \cppinline{std::vector<Real>(256)} with modulo-indexed access to enable reuse of the output buffer and simulate non-memory-bound processing.
 
 \textbf{Challenges encountered:}
 \begin{itemize}
-    \item Initially, the range variables \texttt{V} and \texttt{W} were only declared inside each function. However, since multiple functions need access to them, we had to promote them to class-level member variables.
-    \item Using \texttt{std::views::repeat} or \texttt{std::views::iota} as class members required careful type declarations. Simple type aliases like \texttt{std::ranges::repeat\_view} or \texttt{std::ranges::iota\_view} caused type mismatch errors when assigning views with bounds.
-    \item The correct approach was to use \texttt{decltype(std::views::repeat(...))} and \\
-    \texttt{decltype(std::views::iota(...))} for the member declarations, as this ensured compatibility with the generated view types and compiler support on the cluster (GCC 14).
+    \item Initially, the range variables \cppinline{V} and \cppinline{W} were only declared inside each function. However, since multiple functions need access to them, we had to promote them to class-level member variables.
+    \item Using \cppinline{std::views::repeat} or \texttt{std::views::iota} as class members required careful type declarations. Simple type aliases like \cppinline{std::ranges::repeat\_view} or \cppinline{std::ranges::iota\_view} caused type mismatch errors when assigning views with bounds.
+    \item The correct approach was to use \cppinline{decltype(std::views::repeat(...))} and \\
+          \cppinline{decltype(std::views::iota(...))} for the member declarations, as this ensured compatibility with the generated view types and compiler support on the cluster (GCC 14).
     \item Some loops were not vectorized according to compiler warnings. Since manual unrolling was explicitly requested in the assignment, we did not attempt further refactoring in these cases.
 \end{itemize}
 
@@ -38,13 +37,34 @@ All modified functions were compiled and tested successfully via the targets \\
 
 \pagebreak
 
-\pagebreak
-
 \section*{3.2 Adapting benchTransformUnrollLoopPeelingDirective}
+
+The function \cppinline{benchTransformUnrollLoopPeelingDirective} was implemented using \\
+\cppinline{std::views::iota} for input generation and a fixed-size \cppinline{std::vector} with modulo indexing for the output buffer.
+The loop is unrolled using the custom \cppinline{UNROLLFACTOR} macro and processes SIMD batches via \cppinline{xsimd::batch}.
+We ensured compatibility by using \cppinline{static\_assert(unroll\_factor \% simd\_width == 0)} and unaligned load/store operations for safe access to the input and output.
+
+We used \texttt{unrollScript.sh} to benchmark the function for various unroll factors. The results are stored in the \texttt{changingUnrollFactor/res/} directory on the cluster and in \\
+the \texttt{benchmark} folder in the submitted archive and will be analyzed in section 3.5.
 
 \pagebreak
 
 \section*{3.3 Adapting benchReduceUnrollTreeDirective}
+
+The function \cppinline{benchReduceUnrollTreeDirective} was implemented using a recursive tree-reduction strategy with a configurable tree degree.
+The reduction starts with a \\
+\cppinline{std::array<Real, unroll\_factor>} which is filled from the \cppinline{std::views::repeat} input.
+
+A loop successively reduces this array in-place using groups of \cppinline{tree\_deg} elements per node.
+This process continues as long as the array size is divisible by \cppinline{tree\_deg}. 
+If a remainder is left (i.e. fewer than \cppinline{tree\_deg} values remain), a final sequential sum is performed.
+
+This design ensures flexibility for various unroll and tree degrees. We used \\ 
+\cppinline{static\_assert(unroll\_factor \% tree\_deg == 0)} to catch invalid configurations at compile time.
+The remainder of the input (\cppinline{N \% unroll\_factor}) is processed separately via a scalar OpenMP loop.
+
+The implementation successfully compiles and runs within the benchmark target \\
+\cppinline{reduceVbenchmarkUnroll}.
 
 \pagebreak
 

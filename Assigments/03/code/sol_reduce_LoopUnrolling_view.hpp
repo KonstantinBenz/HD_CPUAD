@@ -473,52 +473,76 @@ public:
 
     auto benchReduceUnrollTreeDirective(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
+        constexpr auto tree_deg = 4; // can be set to 2, 4, 8, ...
+        static_assert(unroll_factor % tree_deg == 0, "Unroll factor must be divisible by tree degree");
+
         N = N % unroll_factor ? N : N + 1;
         auto rem = N % unroll_factor;
-        constexpr auto tree_deg = 8;
-        // TODO
 
-        // --------
+        // Use repeat view for memory-independent input
+        V = std::views::repeat(1.0f, N);
+
         Real sum;
-        Index Nout = min(N, default_Nout);
+        Index Nout = std::min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // TODO
 
-            // --------
+            // Loop over full blocks
 #pragma omp simd reduction(+ : sum)
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
-                // TODO
+                // Initialize first level
+                std::array<Real, unroll_factor> level_buf;
 
-                // --------
+                for (Index j = 0; j < unroll_factor; ++j)
+                    level_buf[j] = V[i + j];
+
+                Index current_size = unroll_factor;
+
+                // Perform reduction levels while current size >= tree_deg
+                while (current_size >= tree_deg)
+                {
+                    Index new_size = current_size / tree_deg;
+                    for (Index j = 0; j < new_size; ++j)
+                    {
+                        Real temp = 0;
+                        for (Index k = 0; k < tree_deg; ++k)
+                            temp += level_buf[j * tree_deg + k];
+                        level_buf[j] = temp;
+                    }
+                    current_size = new_size;
+                }
+
+                // Final sequential sum of remaining elements
+                for (Index j = 0; j < current_size; ++j)
+                    sum += level_buf[j];
             }
 
+            // Handle the remainder using scalar loop
 #pragma omp simd reduction(+ : sum)
-            for (Index i = N - rem; i < N; i++)
+            for (Index i = N - rem; i < N; ++i)
             {
                 sum += V[i];
             }
+
             p_loop_action();
         }
+
         p_log << "UnrollTreeDirective\t" << sum << '\n';
-        return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
+        return std::tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
     auto benchReduceUnrollSimdXHorizontal(Index N = default_N)
     {
-        // Do not change
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         constexpr auto unroll_factor = 64;
+        static_assert(unroll_factor % simd_width == 0, "Unroll factor must be divisible by simd width");
+
         N = N % unroll_factor ? N : N + 1;
         auto rem = N % unroll_factor;
-        // TODO
-
-        // --------
 
         Real sum;
         Index Nout = min(N, default_Nout);
@@ -528,53 +552,84 @@ public:
             sum = 0;
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
-                // TODO
+                batch block_sum = xsimd::batch<Real>::zero();
 
-                // --------
+                // Loop over all sub-blocks inside unroll_factor
+                for (Index j = 0; j < unroll_factor; j += simd_width)
+                {
+                    std::array<Real, simd_width> temp{};
+                    for (Index k = 0; k < simd_width; ++k)
+                        temp[k] = V[i + j + k];
+
+                    batch v_vec = batch::load_unaligned(temp.data());
+                    block_sum += v_vec;
+                }
+
+                // Reduce SIMD register to scalar
+                sum += xsimd::reduce_add(block_sum);
             }
+
+            // Remainder loop (scalar)
             for (Index i = N - rem; i < N; i++)
             {
                 sum += V[i];
             }
         }
+
         p_log << "Unrollxsimd_Horizontal \t" << sum << '\n';
-        return tuple{N * sizeof(Real), 0};
+        return std::tuple{N * sizeof(Real), 0};
     }
 
     auto benchReduceUnrollSimdXVertical(Index N = default_N)
     {
-        // Do not change
         using batch = xsimd::batch<Real>;
         constexpr auto simd_width = batch::size;
         constexpr auto unroll_factor = 64;
+        static_assert(unroll_factor % simd_width == 0, "Unroll factor must be divisible by SIMD width");
+
         N = N % unroll_factor ? N : N + 1;
         auto rem = N % unroll_factor;
-        // TODO
-
-        // --------
 
         Real sum;
-        Index Nout = min(N, default_Nout);
-        batch sum_vec;
+        Index Nout = std::min(N, default_Nout);
+
+        const int num_lanes = unroll_factor / simd_width;
 
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            sum_vec = 0;
-            // TODO
+
+            // Create multiple SIMD lanes
+            std::array<batch, unroll_factor / simd_width> accumulators;
+            for (auto &acc : accumulators)
+                acc = batch::zero();
 
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
+                for (Index j = 0; j < unroll_factor; j += simd_width)
+                {
+                    std::array<Real, simd_width> temp{};
+                    for (Index k = 0; k < simd_width; ++k)
+                        temp[k] = V[i + j + k];
+
+                    batch v_vec = batch::load_unaligned(temp.data());
+                    accumulators[j / simd_width] += v_vec;
+                }
             }
 
-            // --------
-            for (Index i = N - rem; i < N; i++)
+            // Reduce all accumulators
+            for (auto &acc : accumulators)
+                sum += xsimd::reduce_add(acc);
+
+            // Tail values (not SIMD-aligned)
+            for (Index i = N - rem; i < N; ++i)
             {
                 sum += V[i];
             }
         }
+
         p_log << "Unrollxsimd_Vertical \t" << sum << '\n';
-        return tuple{N * sizeof(Real), 0};
+        return std::tuple{N * sizeof(Real), 0};
     }
 };
 template <typename R, typename L>
