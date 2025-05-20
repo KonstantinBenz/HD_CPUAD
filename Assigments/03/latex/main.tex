@@ -56,10 +56,10 @@ The reduction starts with a \\
 \cppinline{std::array<Real, unroll\_factor>} which is filled from the \cppinline{std::views::repeat} input.
 
 A loop successively reduces this array in-place using groups of \cppinline{tree\_deg} elements per node.
-This process continues as long as the array size is divisible by \cppinline{tree\_deg}. 
+This process continues as long as the array size is divisible by \cppinline{tree\_deg}.
 If a remainder is left (i.e. fewer than \cppinline{tree\_deg} values remain), a final sequential sum is performed.
 
-This design ensures flexibility for various unroll and tree degrees. We used \\ 
+This design ensures flexibility for various unroll and tree degrees. We used \\
 \cppinline{static\_assert(unroll\_factor \% tree\_deg == 0)} to catch invalid configurations at compile time.
 The remainder of the input (\cppinline{N \% unroll\_factor}) is processed separately via a scalar OpenMP loop.
 
@@ -70,8 +70,22 @@ The implementation successfully compiles and runs within the benchmark target \\
 
 \section*{3.4 Adapting benchReduceUnrollSimdXHorizontal and benchReduceUnrollSimdXVertical}
 
+\subsection*{Horizontal}
+
+The function \cppinline{benchReduceUnrollSimdXHorizontal} performs a flat reduction of all elements within an \cppinline{unroll\_factor}-sized block. 
+Each SIMD batch of \cppinline{simd\_width} elements is summed and accumulated into a single SIMD register, which is then reduced to scalar using \cppinline{xsimd::reduce\_add}.
+
+\subsection*{Vertical}
+
+The function \cppinline{benchReduceUnrollSimdXVertical} uses a tree-like structure of SIMD lanes. 
+It maintains \cppinline{unroll\_factor / simd\_width} SIMD accumulators, one for each logical reduction path. 
+Input vectors are dispatched into different SIMD accumulators in parallel. The final scalar result is obtained by reducing all lanes individually.
+
 \pagebreak
 
 \section*{3.5 Benchmarking}
+
+
+
 
 \end{document}

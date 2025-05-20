@@ -25,7 +25,7 @@ int main(){
 	benchmarker(&test, &reduce::benchReduceUnrollSimdXVertical, "benchReduceUnrollSimdXVertical", Nl, Nh, dur, timings,rec);
 	
 
-    // std::cout << test.get_log();
+    std::cout << test.get_log();
 
 	return 0;
 }
