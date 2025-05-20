@@ -370,47 +370,48 @@ public:
         p_log << "UnrollLoopPeeling\t" << views::take(W, Nout) << '\n';
         return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
     }
-
-    auto benchTransformUnrollLoopPeelingDirective(Index N = default_N)
-    {
-        // Do not change
-        Real a = -1.0f;
-        using batch = xsimd::batch<Real>;
-        constexpr auto simd_width = batch::size;
-
-        constexpr auto unroll_factor = UNROLLFACTOR;
-        N = N % unroll_factor ? N : N + 1;
-        auto rem = N % unroll_factor;
-
-        // TODO
-
-        // --------
-
-        Index Nout = min(N, default_Nout);
-        for (auto _ : p_loop_state)
+    /*
+        auto benchTransformUnrollLoopPeelingDirective(Index N = default_N)
         {
-            batch a_vec(-1.0f);
+            // Do not change
+            Real a = -1.0f;
+            using batch = xsimd::batch<Real>;
+            constexpr auto simd_width = batch::size;
 
-#pragma omp simd
-            for (Index i = 0; i < N - rem; i += unroll_factor)
+            constexpr auto unroll_factor = UNROLLFACTOR;
+            N = N % unroll_factor ? N : N + 1;
+            auto rem = N % unroll_factor;
+
+            // TODO
+
+            // --------
+
+            Index Nout = min(N, default_Nout);
+            for (auto _ : p_loop_state)
             {
+                batch a_vec(-1.0f);
 
-#pragma unroll
+    #pragma omp simd
+                for (Index i = 0; i < N - rem; i += unroll_factor)
+                {
 
-                // TODO
+    #pragma unroll
 
-                // --------
+                    // TODO
+
+                    // --------
+                }
+    #pragma omp simd
+                for (Index i = N - rem; i < N; i++)
+                {
+                    W[i] = a * V[i] + W[i];
+                }
+                p_loop_action();
             }
-#pragma omp simd
-            for (Index i = N - rem; i < N; i++)
-            {
-                W[i] = a * V[i] + W[i];
-            }
-            p_loop_action();
+            p_log << "UnrollLoopPeelingDirective\t" << views::take(W, Nout) << '\n';
+            return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
         }
-        p_log << "UnrollLoopPeelingDirective\t" << views::take(W, Nout) << '\n';
-        return tuple{N * sizeof(Real) * 2, N * sizeof(Real)};
-    }
+            */
 };
 template <typename R, typename L>
 array<char, 1> transform_LoopUnrolling_view<R, L>::p_one = {0};
