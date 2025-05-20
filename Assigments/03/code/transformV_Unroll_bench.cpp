@@ -1,7 +1,7 @@
 #include <numeric>
 #include <cmath>
 #include "benchmarker.hpp"
-#include "sol_transform_LoopUnrolling_view.hpp"
+#include "transform_LoopUnrolling_view.hpp"
 
 int main(){
 	using transform = transform_LoopUnrolling_view<ClockRecorder>;
