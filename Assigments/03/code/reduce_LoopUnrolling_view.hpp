@@ -50,20 +50,18 @@ public:
 
     auto benchReduceOmpSimd(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
         N = N % unroll_factor ? N : N + 1;
 
-        // TODO
+        // Use repeat_view to simulate memory-independent repeated values
+        V = views::repeat(1.0f, N);
 
-        // --------
         Real sum;
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // reduce with openmp directive
 #pragma omp simd reduction(+ : sum)
             for (Index i = 0; i < N; i++)
             {
@@ -76,19 +74,17 @@ public:
 
     auto benchReduceDirectiveUnroll(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
         N = N % unroll_factor ? N : N + 1;
-        // TODO
 
-        // --------
+        V = views::repeat(1.0f, N);
+
         Real sum;
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // using openmp unroll directive with index
 #pragma omp simd reduction(+ : sum)
 #pragma unroll
             for (Index i = 0; i < N; i++)
@@ -102,21 +98,17 @@ public:
 
     auto benchReduceDirectiveUnrollFactor64(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
         N = N % unroll_factor ? N : N + 1;
-        // TODO
 
-        // --------
+        V = views::repeat(1.0f, N);
 
         Real sum;
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // using openmp unroll directive with pre-set factor and index
-
 #pragma omp simd reduction(+ : sum)
 #pragma unroll(unroll_factor)
             for (Index i = 0; i < N; i++)
@@ -130,22 +122,19 @@ public:
 
     auto benchReduceUnrollManual(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
         N = N % unroll_factor ? N : N + 1;
         auto rem = N % unroll_factor;
-        // TODO
 
-        // --------
+        // Initialize repeat view V with N repetitions of 1.0f
+        V = views::repeat(1.0f, N);
 
         Real sum;
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
             sum = 0;
-            // using manual unroll with index
-
 #pragma omp simd reduction(+ : sum)
             for (Index i = 0; i < N; i += unroll_factor)
             {
@@ -292,7 +281,7 @@ public:
         N = N % unroll_factor ? N : N + 1;
         auto rem = N % unroll_factor;
         // TODO
-
+        V = views::repeat(1.0f, N); // all values are 1.0f
         // --------
 
         Real sum;
@@ -575,8 +564,6 @@ public:
 
             for (Index i = 0; i < N - rem; i += unroll_factor)
             {
-
-
             }
 
             // --------

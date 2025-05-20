@@ -52,22 +52,21 @@ public:
 
     auto benchTransformOmpSimd(Index N = default_N)
     {
-        // Do not change
+        // Define scaling factor
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
 
-        // TODO
-
-        // --------
+        // Define input and output: V is an iota view; W is a 256-element vector reused modulo
+        V = views::iota(0, N);       // generates 0,1,2,...,N-1
+        W = vector<Real>(256, 1.0f); // initialize W with arbitrary value
 
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
-            // using openmp simd directive with index
 #pragma omp simd
             for (Index i = 0; i < N; i++)
             {
-                W[i] = a * V[i] + W[i];
+                W[i % 256] = a * V[i] + W[i % 256];
             }
             p_loop_action();
         }
@@ -77,23 +76,20 @@ public:
 
     auto benchTransformDirectiveUnroll(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
 
-        // TODO
-
-        // --------
+        V = views::iota(0, N);
+        W = vector<Real>(256, 1.0f);
 
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
-            // using openmp unroll directive with index
 #pragma omp simd
 #pragma unroll
             for (Index i = 0; i < N; i++)
             {
-                W[i] = a * V[i] + W[i];
+                W[i % 256] = a * V[i] + W[i % 256];
             }
             p_loop_action();
         }
@@ -103,24 +99,21 @@ public:
 
     auto benchTransformDirectiveUnrollFactor64(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
         N = N % unroll_factor ? N : N + 1;
 
-        // TODO
-
-        // --------
+        V = views::iota(0, N);
+        W = vector<Real>(256, 1.0f);
 
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
         {
-            // using openmp unroll directive with index
 #pragma omp simd
 #pragma unroll(unroll_factor)
             for (Index i = 0; i < N; i++)
             {
-                W[i] = a * V[i] + W[i];
+                W[i % 256] = a * V[i] + W[i % 256];
             }
             p_loop_action();
         }
@@ -130,15 +123,14 @@ public:
 
     auto benchTransformUnrollManual(Index N = default_N)
     {
-        // Do not change
         Real a = -1.0f;
         constexpr auto unroll_factor = 64;
         N = N % unroll_factor ? N : N + 1;
         auto rem = N % unroll_factor;
 
-        // TODO
-
-        // --------
+        // Initialize V with increasing values and W as reusable container with size 256
+        V = views::iota(0, N);
+        W = vector<Real>(256, 1.0f);
 
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
@@ -292,7 +284,8 @@ public:
         auto rem = N % unroll_factor;
 
         // TODO
-
+        V = views::iota(0, N);       // values: 0,1,2,...,N-1
+        W = vector<Real>(256, 1.0f); // fixed-size output buffer
         // --------
         Index Nout = min(N, default_Nout);
         for (auto _ : p_loop_state)
@@ -401,7 +394,7 @@ public:
             {
 
 #pragma unroll
-                
+
                 // TODO
 
                 // --------

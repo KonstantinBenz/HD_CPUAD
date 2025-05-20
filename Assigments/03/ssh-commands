@@ -1,0 +1,9 @@
+// move files
+scp ex02-code.tar.gz he343@asc-headnode.ziti.uni-heidelberg.de:/media/oldhome/kbenz
+// connect
+ssh he343@asc-headnode.ziti.uni-heidelberg.de
+// change path 
+cd /media/oldhome/kbenz/git/HD_CPUAD/Assigments/03/code
+// load env
+source load_env_CPUAD.sh
+//
