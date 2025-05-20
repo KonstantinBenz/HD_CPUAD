@@ -17,6 +17,12 @@
 
 \section*{3.1 Adapting reduce and transform}
 
+The input containers in \texttt{reduce\_LoopUnrolling\_view.hpp} and \texttt{transform\_LoopUnrolling\_view.hpp} have been adapted as requested.
+For the reduction routines, \texttt{std::views::repeat(1.0f, N)} is used to replace the original memory-backed containers. This ensures that the workload is compute-bound rather than memory-bound.
+For the transform routines, \texttt{std::ranges::views::iota(0, N)} is used for the input range, and the output container \texttt{W} is a fixed-size \texttt{std::vector<Real>(256)} with modulo indexing.
+\\
+All adapted benchmark functions were successfully compiled and tested using the executables \texttt{reduceVbenchmarkUnroll} and \texttt{transformVbenchmarkUnroll} on the target system.
+
 \pagebreak
 
 \section*{3.2 Adapting benchTransformUnrollLoopPeelingDirective}

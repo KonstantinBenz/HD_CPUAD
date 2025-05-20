@@ -44,7 +44,8 @@ public:
     using AlignedContainer = std::vector<T, xsimd::default_allocator<T>>;
     static constexpr auto stExec = execution::unseq;     // single-threaded execution policy
     static constexpr auto mtExec = execution::par_unseq; // multi-threaded execution policy
-    decltype(std::views::repeat(1.0f, 1)) V;             // Used for memory-independent input
+    decltype(std::views::iota(0, 1)) V;                  // Used for memory-independent input
+    std::vector<Real> W;                                 // Output container with modulo indexing
 
     static constexpr Index default_n = 3;
     static constexpr Index default_m = 2;
