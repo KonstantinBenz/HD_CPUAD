@@ -1,7 +1,7 @@
 #include <numeric>
 #include <cmath>
 #include "benchmarker.hpp"
-#include "reduce_LoopUnrolling_view.hpp"
+#include "sol_reduce_LoopUnrolling_view.hpp"
 
 int main(){
 	using reduce = reduce_LoopUnrolling_view<ClockRecorder>;
